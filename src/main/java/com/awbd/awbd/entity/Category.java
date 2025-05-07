@@ -7,17 +7,12 @@ import java.util.List;
 
 @Entity
 public class Category {
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue
     private Long id;
-    private LocalDateTime date;
-    @ManyToOne
-    private Review vehicle;
-    @ManyToOne
-    private Event client;
-    @ManyToOne
-    private Ticket mechanic;
-    @ManyToMany
-    private List<Location> services;
+
+    private String name;
+
+    @OneToMany(mappedBy = "category")
+    private List<Event> events;
 }
 
