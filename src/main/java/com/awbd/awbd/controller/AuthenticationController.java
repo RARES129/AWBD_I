@@ -16,15 +16,18 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
+
 public class AuthenticationController {
 
     private final UserService userService;
 
     @PostMapping
+
     public ResponseEntity<String> createUser(
             @Valid @RequestBody
             UserCreationRequestDto userCreationRequestDto) {
         User user = userService.createUser(userCreationRequestDto);
+
         return new ResponseEntity<>("user created succesfully", HttpStatus.CREATED);
     }
 
@@ -57,4 +60,3 @@ public class AuthenticationController {
         }
     }
 }
-
