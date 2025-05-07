@@ -16,16 +16,16 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
-public class UserController {
+public class AuthenticationController {
 
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> createUser(
+    public ResponseEntity<String> createUser(
             @Valid @RequestBody
             UserCreationRequestDto userCreationRequestDto) {
         User user = userService.createUser(userCreationRequestDto);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        return new ResponseEntity<>("user created succesfully", HttpStatus.CREATED);
     }
 
     @GetMapping
