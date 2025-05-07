@@ -1,9 +1,9 @@
 package com.awbd.awbd.repository;
 
-import com.awbd.awbd.entity.Appointment;
+import com.awbd.awbd.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
-public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
+public interface AppointmentRepository extends JpaRepository<Category, Long> {
 }
 

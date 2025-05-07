@@ -5,15 +5,15 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-public class Vehicle {
+public class Review {
     @Id
     @GeneratedValue
     private Long id;
     private String licensePlate;
     private String model;
     @ManyToOne
-    private Client client;
+    private Event client;
     @OneToMany(mappedBy = "vehicle")
-    private List<Appointment> appointments;
+    private List<Category> appointments;
 }
 

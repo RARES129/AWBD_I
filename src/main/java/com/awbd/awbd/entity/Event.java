@@ -3,7 +3,7 @@ package com.awbd.awbd.entity;
 import jakarta.persistence.*;
 
 @Entity
-public class Client extends User {
+public class Event extends User {
     private String name;
     private String phone;
 

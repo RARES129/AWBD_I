@@ -6,18 +6,18 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-public class Appointment {
+public class Category {
     @Id
     @GeneratedValue
     private Long id;
     private LocalDateTime date;
     @ManyToOne
-    private Vehicle vehicle;
+    private Review vehicle;
     @ManyToOne
-    private Client client;
+    private Event client;
     @ManyToOne
-    private Mechanic mechanic;
+    private Ticket mechanic;
     @ManyToMany
-    private List<ServiceType> services;
+    private List<Location> services;
 }
 

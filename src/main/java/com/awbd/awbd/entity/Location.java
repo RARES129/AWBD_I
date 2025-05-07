@@ -8,13 +8,13 @@ import jakarta.persistence.ManyToMany;
 import java.util.List;
 
 @Entity
-public class ServiceType {
+public class Location {
     @Id
     @GeneratedValue
     private Long id;
     private String name;
     private double price;
     @ManyToMany(mappedBy = "services")
-    private List<Appointment> appointments;
+    private List<Category> appointments;
 }
 

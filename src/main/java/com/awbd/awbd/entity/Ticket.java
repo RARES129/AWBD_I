@@ -5,11 +5,11 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-public class Mechanic extends User{
+public class Ticket extends User{
 
     private String name;
     private String specialization;
     @OneToMany(mappedBy = "mechanic")
-    private List<Appointment> appointments;
+    private List<Category> appointments;
 }
 
