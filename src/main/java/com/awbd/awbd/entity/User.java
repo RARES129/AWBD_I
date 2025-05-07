@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -32,5 +33,13 @@ public class User {
     private List<Event> tikets;
 
     @OneToMany(mappedBy = "user")
-    private List<Reviews> reviews;
+    private List<Review> reviews;
+
+    @ManyToMany
+    @JoinTable(
+            name = "event_participants",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "event_id")
+    )
+    private Set<Event> joinedEvents;
 }

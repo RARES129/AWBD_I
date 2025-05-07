@@ -2,18 +2,21 @@ package com.awbd.awbd.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 public class Review {
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue
     private Long id;
-    private String licensePlate;
-    private String model;
-    @ManyToOne
-    private Event client;
-    @OneToMany(mappedBy = "vehicle")
-    private List<Category> appointments;
-}
 
+    private int rating;
+    private String comment;
+    private LocalDateTime createdAt;
+
+    @ManyToOne
+    private User user;
+
+    @ManyToOne
+    private Event event;
+}
