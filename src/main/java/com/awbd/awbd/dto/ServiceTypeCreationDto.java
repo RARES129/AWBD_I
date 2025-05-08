@@ -3,8 +3,7 @@ package com.awbd.awbd.dto;
 import lombok.Data;
 
 @Data
-public class ServiceTypeDto {
-    private Long id;
+public class ServiceTypeCreationDto {
     private String name;
     private Double price;
 }

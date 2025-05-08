@@ -12,8 +12,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AppointmentDto {
-    private Long id;
+public class AppointmentCreationDto {
     private LocalDateTime dateTime;
     private Long clientId;
     private Long mechanicId;

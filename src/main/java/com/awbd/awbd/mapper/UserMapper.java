@@ -15,8 +15,8 @@ public interface UserMapper {
 //    @SubclassMapping(source = ClientDto.class, target = Client.class)
 //    @SubclassMapping(source = MechanicDto.class, target = Mechanic.class)
 //    User toUser(UserDto userDto);
-    @SubclassMapping(source = Client.class, target = ClientDto.class)
-    @SubclassMapping(source = Mechanic.class, target = MechanicDto.class)
+//    @SubclassMapping(source = Client.class, target = ClientDto.class)
+//    @SubclassMapping(source = Mechanic.class, target = MechanicDto.class)
     UserDto ToUserDTO(User User);
 }
 
