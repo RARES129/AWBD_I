@@ -3,6 +3,7 @@ package com.awbd.awbd.service;
 import com.awbd.awbd.dto.RegisterRequestBody;
 import com.awbd.awbd.entity.Client;
 import com.awbd.awbd.entity.Mechanic;
+import com.awbd.awbd.entity.Role;
 import com.awbd.awbd.entity.User;
 import com.awbd.awbd.mapper.UserMapper;
 import com.awbd.awbd.repository.UserRepository;
@@ -31,6 +32,7 @@ public class UserService {
 
         user.setUsername(registerRequestBody.getUsername());
         user.setPassword(registerRequestBody.getPassword());
+        user.setRole(Role.valueOf(registerRequestBody.getRole()));
 
         System.out.println(user);
         return userRepository.save(user);
