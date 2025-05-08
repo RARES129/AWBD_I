@@ -14,7 +14,10 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+//@DiscriminatorValue("CLIENT")
 public class Client extends User {
+
+//    private String clientString;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<Appointment> appointments;

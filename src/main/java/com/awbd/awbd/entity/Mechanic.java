@@ -10,6 +10,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+//@DiscriminatorValue("MECHANIC")
 public class Mechanic extends User {
 
     @OneToMany(mappedBy = "mechanic", cascade = CascadeType.ALL)

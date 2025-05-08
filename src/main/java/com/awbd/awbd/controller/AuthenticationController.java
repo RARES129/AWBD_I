@@ -1,6 +1,6 @@
 package com.awbd.awbd.controller;
 
-import com.awbd.awbd.dto.UserCreationRequestDto;
+import com.awbd.awbd.dto.RegisterRequestBody;
 import com.awbd.awbd.entity.User;
 import com.awbd.awbd.service.UserService;
 import jakarta.validation.Valid;
@@ -23,10 +23,10 @@ public class AuthenticationController {
 
     @PostMapping
 
-    public ResponseEntity<String> createUser(
+    public ResponseEntity<String> register(
             @Valid @RequestBody
-            UserCreationRequestDto userCreationRequestDto) {
-        User user = userService.createUser(userCreationRequestDto);
+            RegisterRequestBody registerRequestBody) {
+        User user = userService.createUser(registerRequestBody);
 
         return new ResponseEntity<>("user created succesfully", HttpStatus.CREATED);
     }

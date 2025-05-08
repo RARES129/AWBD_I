@@ -34,7 +34,7 @@ public class VehicleService {
     public VehicleDto addVehicleToClient(Long clientId, VehicleCreationDto vehicleCreationDto) {
         System.out.println(vehicleCreationDto);
         System.out.println(clientId);
-        Client client = userRepository.findById(clientId)
+        Client client = (Client) userRepository.findById(clientId)
                 .orElseThrow(() -> new NoSuchElementException("Client not found with ID: " + clientId));
 
         Vehicle vehicle = vehicleMapper.toVehicle(vehicleCreationDto);
