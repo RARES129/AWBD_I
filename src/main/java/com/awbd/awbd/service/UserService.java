@@ -21,20 +21,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    public User createUser(RegisterRequestBody registerRequestBody) {
-//        User user = userMapper.toUser(registerRequestBody);
-//        return userRepository.save(user);
-        User user = switch (registerRequestBody.getRole()) {
+    public User createUser(RegisterRequestBody requestBody) {
+        User user = switch (requestBody.getRole()) {
             case "CLIENT" -> new Client();
             case "MECHANIC" -> new Mechanic();
-            default -> throw new IllegalArgumentException("Invalid role: " + registerRequestBody.getRole());
+            default -> throw new IllegalArgumentException("Invalid role: " + requestBody.getRole());
         };
-
-        user.setUsername(registerRequestBody.getUsername());
-        user.setPassword(registerRequestBody.getPassword());
-        user.setRole(Role.valueOf(registerRequestBody.getRole()));
-
-        System.out.println(user);
+        userMapper.updateUserFromRequest(requestBody, user);
         return userRepository.save(user);
     }
 
