@@ -22,7 +22,7 @@
         <li class="nav-item">
           <a class="nav-link" th:href="@{'/vehicle'}">Vehicles</a>
         </li>
-        <li sec:authorize="hasRole('ADMIN')" class="nav-item">
+        <li sec:authorize="hasRole('CLIENT')" class="nav-item">
           <a class="nav-link btn-primary" th:href="@{'/vehicle/form'}">
             <i class="fas fa-plus-circle"></i> Add Vehicle
           </a>

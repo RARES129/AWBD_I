@@ -30,9 +30,9 @@ public class SecurityJpaConfig {
         return http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/webjars/**", "/login", "/register", "/resources/**").permitAll()
-                        .requestMatchers("/vehicle/form").hasRole("ADMIN")
-                        .requestMatchers("/vehicle/*").hasAnyRole("ADMIN", "GUEST")
-                        .requestMatchers("/vehicle/*").hasAnyRole("ADMIN", "GUEST")
+                        .requestMatchers("/vehicle/form").hasRole("CLIENT")
+                        .requestMatchers("/vehicle/*").hasAnyRole("MECHANIC", "CLIENT")
+                        .requestMatchers("/vehicle/*").hasAnyRole("MECHANIC", "CLIENT")
                         .anyRequest().authenticated()
                 )
                 .userDetailsService(userDetailsService)

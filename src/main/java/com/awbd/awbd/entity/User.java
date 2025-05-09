@@ -27,11 +27,6 @@ public abstract class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Singular
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_authority", joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")}, inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "ID")})
-    private Set<Authority> authorities;
-
     @Builder.Default
     private Boolean accountNonExpired = true;
 

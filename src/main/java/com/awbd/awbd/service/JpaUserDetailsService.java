@@ -1,11 +1,6 @@
 package com.awbd.awbd.service;
 
-import com.awbd.awbd.dto.UserDto;
-import com.awbd.awbd.entity.Authority;
-import com.awbd.awbd.entity.Client;
-import com.awbd.awbd.entity.Mechanic;
-import com.awbd.awbd.entity.User;
-import com.awbd.awbd.mapper.UserMapper;
+import com.awbd.awbd.entity.*;
 import com.awbd.awbd.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +9,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -48,20 +42,14 @@ public class JpaUserDetailsService implements UserDetailsService {
                 user.getAccountNonExpired(),
                 user.getCredentialsNonExpired(),
                 user.getAccountNonLocked(),
-                getAuthorities(user.getAuthorities()));
+                getAuthorities(user.getRole()));
     }
 
-    private Collection<? extends GrantedAuthority> getAuthorities(Set<Authority> authorities) {
-        if (authorities == null){
+    private Collection<? extends GrantedAuthority> getAuthorities(Role role) {
+        if (role == null) {
             return new HashSet<>();
-        } else if (authorities.isEmpty()){
-            return new HashSet<>();
-        }
-        else{
-            return authorities.stream()
-                    .map(Authority::getRole)
-                    .map(SimpleGrantedAuthority::new)
-                    .collect(Collectors.toSet());
+        } else {
+            return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.name()));
         }
     }
 
