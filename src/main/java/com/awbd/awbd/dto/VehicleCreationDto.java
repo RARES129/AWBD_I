@@ -7,4 +7,5 @@ public class VehicleCreationDto {
     private String brand;
     private String model;
     private String plateNumber;
+    private Long clientId;
 }
