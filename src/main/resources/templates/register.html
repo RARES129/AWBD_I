@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/5.3.3/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/webjars/font-awesome/6.5.2/css/all.min.css"/>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+    </style>
+</head>
+<body class="d-flex justify-content-center align-items-center bg-light">
+<div class="card p-4" style="width: 100%; max-width: 400px;">
+    <form class="form-signin" method="post" th:action="@{/register}">
+        <h2 class="form-signin-heading text-center mb-4">Register</h2>
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" id="username" name="username" class="form-control" placeholder="Username" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+        </div>
+        <div class="mb-3">
+            <label for="role" class="form-label">Role</label>
+            <select class="form-select" id="role" name="role" required>
+                <option value="">Select Role</option>
+                <option value="CLIENT">CLIENT</option>
+                <option value="MECHANIC">MECHANIC</option>
+            </select>
+        </div>
+        <div class="d-grid">
+            <button class="btn btn-success btn-lg" type="submit">Register</button>
+        </div>
+        <div class="d-grid mt-3">
+            <a class="btn btn-secondary btn-lg" href="/login">Back to Login</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

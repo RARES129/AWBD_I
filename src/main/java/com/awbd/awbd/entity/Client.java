@@ -6,6 +6,7 @@ import com.awbd.awbd.entity.Vehicle;
 import jakarta.persistence.*;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 //@DiscriminatorValue("CLIENT")
 public class Client extends User {
 

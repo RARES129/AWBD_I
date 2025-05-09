@@ -2,13 +2,18 @@ package com.awbd.awbd.entity;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+
+import java.util.Set;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Entity
+@SuperBuilder
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class User {
 
@@ -21,4 +26,21 @@ public abstract class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Singular
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_authority", joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")}, inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "ID")})
+    private Set<Authority> authorities;
+
+    @Builder.Default
+    private Boolean accountNonExpired = true;
+
+    @Builder.Default
+    private Boolean accountNonLocked = true;
+
+    @Builder.Default
+    private Boolean credentialsNonExpired = true;
+
+    @Builder.Default
+    private Boolean enabled = true;
 }

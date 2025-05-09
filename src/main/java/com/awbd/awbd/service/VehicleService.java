@@ -10,6 +10,8 @@ import com.awbd.awbd.repository.ClientRepository;
 import com.awbd.awbd.repository.UserRepository;
 import com.awbd.awbd.repository.VehicleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,7 @@ public class VehicleService {
     private final VehicleRepository vehicleRepository;
     private final VehicleMapper vehicleMapper;
     private final ClientRepository clientRepository;
+    private final UserRepository userRepository;
 
     public List<VehicleDto> findAll() {
         return vehicleRepository.findAll().stream()
@@ -33,6 +36,13 @@ public class VehicleService {
 
     @Transactional
     public void save(VehicleDto vehicleDto) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        var user = userRepository.findByUsername(username);
+        System.out.println(user.get());
+
         Vehicle vehicle;
 
         if (vehicleDto.getId() != null) {

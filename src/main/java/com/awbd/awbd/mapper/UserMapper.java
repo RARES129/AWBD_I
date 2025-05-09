@@ -13,14 +13,14 @@ import org.mapstruct.SubclassMapping;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
+    void updateUserFromRequest(UserDto userDto, @MappingTarget User user);
+
 //    @SubclassMapping(source = ClientDto.class, target = Client.class)
 //    @SubclassMapping(source = MechanicDto.class, target = Mechanic.class)
 //    User toUser(RegisterRequestBody registerRequestBody);
 //    @SubclassMapping(source = Client.class, target = ClientDto.class)
 //    @SubclassMapping(source = Mechanic.class, target = MechanicDto.class)
 //    UserDto ToUserDTO(User User);
-    void updateUserFromRequest(RegisterRequestBody requestBody, @MappingTarget User user);
-
 }
 
 
