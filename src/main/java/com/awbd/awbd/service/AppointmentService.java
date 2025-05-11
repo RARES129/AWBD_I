@@ -67,9 +67,9 @@ public class AppointmentService {
             ServiceType serviceType = serviceTypeRepository.findById(serviceTypeId)
                     .orElseThrow(() -> new RuntimeException("ServiceType not found with id: " + serviceTypeId));
 
-            if (mechanic.getServiceTypes().stream().noneMatch(st -> st.getId().equals(serviceType.getId()))) {
-                throw new RuntimeException("ServiceType with id: " + serviceType.getId() + " is not assigned to mechanic with id: " + mechanic.getId());
-            }
+//            if (mechanic.getServiceTypes().stream().noneMatch(st -> st.getId().equals(serviceType.getId()))) {
+//                throw new RuntimeException("ServiceType with id: " + serviceType.getId() + " is not assigned to mechanic with id: " + mechanic.getId());
+//            }
 
             serviceTypes.add(serviceType);
         }
@@ -112,9 +112,9 @@ public class AppointmentService {
             ServiceType serviceType = serviceTypeRepository.findById(serviceTypeId)
                     .orElseThrow(() -> new RuntimeException("ServiceType not found with id: " + serviceTypeId));
 
-            if (mechanic.getServiceTypes().stream().noneMatch(st -> st.getId().equals(serviceType.getId()))) {
-                throw new RuntimeException("ServiceType with id: " + serviceType.getId() + " is not assigned to mechanic with id: " + mechanic.getId());
-            }
+//            if (mechanic.getServiceTypes().stream().noneMatch(st -> st.getId().equals(serviceType.getId()))) {
+//                throw new RuntimeException("ServiceType with id: " + serviceType.getId() + " is not assigned to mechanic with id: " + mechanic.getId());
+//            }
 
             serviceTypes.add(serviceType);
         }

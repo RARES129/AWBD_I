@@ -11,8 +11,5 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class ClientDto extends UserDto {
-//    private String clientString;
-    private List<Appointment> appointments;
-    private List<Vehicle> vehicles;
-    private List<Receipt> receipts;
+
 }

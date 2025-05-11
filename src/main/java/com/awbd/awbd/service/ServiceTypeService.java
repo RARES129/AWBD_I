@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -40,7 +41,7 @@ public class ServiceTypeService {
         ServiceType savedServiceType = serviceTypeRepository.save(serviceType);
 
         // Add the service type to the mechanic's list of service types
-        mechanic.getServiceTypes().add(savedServiceType);
+//        mechanic.getServiceTypes().add(savedServiceType);
         mechanicRepository.save(mechanic);
 
         return serviceTypeMapper.toServiceTypeDto(savedServiceType);
@@ -58,9 +59,11 @@ public class ServiceTypeService {
         Mechanic mechanic = mechanicRepository.findById(mechanicId)
                 .orElseThrow(() -> new NoSuchElementException("Mechanic not found with ID: " + mechanicId));
 
-        return mechanic.getServiceTypes().stream()
-                .map(serviceTypeMapper::toServiceTypeDto)
-                .collect(Collectors.toList());
+        return new ArrayList<>();
+
+//        return mechanic.getServiceTypes().stream()
+//                .map(serviceTypeMapper::toServiceTypeDto)
+//                .collect(Collectors.toList());
     }
 
     /**
@@ -81,9 +84,9 @@ public class ServiceTypeService {
                 .orElseThrow(() -> new NoSuchElementException("Mechanic not found with ID: " + mechanicId));
 
         // Check if the service type belongs to the specified mechanic
-        if (!mechanic.getServiceTypes().contains(existingServiceType)) {
-            throw new NoSuchElementException("Service type with ID: " + serviceTypeId + " does not belong to mechanic with ID: " + mechanicId);
-        }
+//        if (!mechanic.getServiceTypes().contains(existingServiceType)) {
+//            throw new NoSuchElementException("Service type with ID: " + serviceTypeId + " does not belong to mechanic with ID: " + mechanicId);
+//        }
 
         // Update the service type properties
         existingServiceType.setName(serviceTypeCreationDto.getName());
@@ -109,12 +112,12 @@ public class ServiceTypeService {
                 .orElseThrow(() -> new NoSuchElementException("Mechanic not found with ID: " + mechanicId));
 
         // Check if the service type belongs to the specified mechanic
-        if (!mechanic.getServiceTypes().contains(existingServiceType)) {
-            throw new NoSuchElementException("Service type with ID: " + serviceTypeId + " does not belong to mechanic with ID: " + mechanicId);
-        }
+//        if (!mechanic.getServiceTypes().contains(existingServiceType)) {
+//            throw new NoSuchElementException("Service type with ID: " + serviceTypeId + " does not belong to mechanic with ID: " + mechanicId);
+//        }
 
         // Remove the service type from the mechanic's list of service types
-        mechanic.getServiceTypes().remove(existingServiceType);
+//        mechanic.getServiceTypes().remove(existingServiceType);
         mechanicRepository.save(mechanic);
 
         serviceTypeRepository.deleteById(serviceTypeId);

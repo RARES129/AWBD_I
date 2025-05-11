@@ -31,7 +31,7 @@ public class VehicleController {
 
     @RequestMapping("")
     public String vehicleList(Model model) {
-        List<VehicleDto> vehicles = vehicleService.findAll();
+        List<VehicleDto> vehicles = vehicleService.findClientVehicles();
         model.addAttribute("vehicles",vehicles);
         return "vehicleList";
     }

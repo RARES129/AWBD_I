@@ -8,11 +8,9 @@ import lombok.experimental.SuperBuilder;
 import java.util.Set;
 
 @Data
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@Entity
 @SuperBuilder
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class User {

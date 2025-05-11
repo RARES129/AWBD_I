@@ -19,7 +19,8 @@ public class ServiceType {
     private String name;
     private Double price;
 
-    @ManyToMany(mappedBy = "serviceTypes")
+    @ManyToMany()
+    //@ManyToMany(mappedBy = "serviceTypes")
     private List<Mechanic> mechanics;
 
     @ManyToMany(mappedBy = "serviceTypes")

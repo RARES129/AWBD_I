@@ -1,5 +1,6 @@
 package com.awbd.awbd.service;
 
+import com.awbd.awbd.config.SecurityUtil;
 import com.awbd.awbd.dto.VehicleCreationDto;
 import com.awbd.awbd.dto.VehicleDto;
 import com.awbd.awbd.entity.Client;
@@ -26,7 +27,6 @@ public class VehicleService {
     private final VehicleRepository vehicleRepository;
     private final VehicleMapper vehicleMapper;
     private final ClientRepository clientRepository;
-    private final UserRepository userRepository;
 
     public List<VehicleDto> findAll() {
         return vehicleRepository.findAll().stream()
@@ -36,12 +36,8 @@ public class VehicleService {
 
     @Transactional
     public void save(VehicleDto vehicleDto) {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-
-        var user = userRepository.findByUsername(username);
-        System.out.println(user.get());
+        String username = SecurityUtil.getSessionUsername();
+        Client client = clientRepository.findByUsername(username);
 
         Vehicle vehicle;
 
@@ -50,23 +46,29 @@ public class VehicleService {
                     .orElseThrow(() -> new RuntimeException("Vehicle not found."));
             vehicleMapper.updateVehicleFromDto(vehicleDto, vehicle);
         } else {
-            Client newClient = new Client();
-            Client client = clientRepository.save(newClient);
             vehicle = vehicleMapper.toVehicle(vehicleDto, client);
         }
         vehicleRepository.save(vehicle);
     }
 
     public VehicleDto findById(Long id) {
-        Optional<Vehicle> vehicleOptional = vehicleRepository.findById(id);
-        if (vehicleOptional.isEmpty()) {
-            throw new RuntimeException("Product not found!");
-        }
-        return vehicleMapper.toVehicleDto(vehicleOptional.get());
+        Vehicle vehicle = vehicleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Vehicle not found."));
+        return vehicleMapper.toVehicleDto(vehicle);
     }
 
     @Transactional
     public void deleteById(Long id) {
         vehicleRepository.deleteById(id);
+    }
+
+    public List<VehicleDto> findClientVehicles() {
+        String username = SecurityUtil.getSessionUsername();
+        Client client = clientRepository.findByUsername(username);
+
+        return vehicleRepository.findByOwnerId(client.getId())
+                .stream()
+                .map(vehicleMapper::toVehicleDto)
+                .toList();
     }
 }
