@@ -60,23 +60,16 @@
         <thead class="thead-inverse">
         <tr>
             <th>ID</th>
-            <th>Brand</th>
-            <th>Model</th>
-            <th>Plate Number</th>
-            <th></th>
+            <th>Username</th>
             <th></th>
         </tr>
         </thead>
-        <tr th:each="vehicle, stat : ${vehicles}"
+        <tr th:each="mechanic, stat : ${mechanics}"
             th:class="${stat.odd}? 'table-light':''">
-            <td th:text="${vehicle.id}">1</td>
-            <td th:text="${vehicle.brand}">Vehicle 1</td>
-            <td th:text="${vehicle.model}">Model</td>
-            <td th:text="${vehicle.plateNumber}">Plate Number</td>
-            <td><a href="#" th:href="@{'/vehicle/edit/' + ${vehicle.id}}"><i class="fa-solid fa-pen"></i></a></td>
-            <td><a href="#" th:href="@{'/vehicle/delete/' + ${vehicle.id}}"><i class="fa-solid fa-trash"></i></a></td>
+            <td th:text="${mechanic.id}">1</td>
+            <td th:text="${mechanic.username}">Mechanic 1</td>
+            <td><a th:href="@{'/appointment/mechanic/' + ${mechanic.id}}"><i class="fa-solid fa-calendar-check"></i></a></td>
         </tr>
-
     </table>
 </div>
 

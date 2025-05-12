@@ -19,7 +19,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
 
     public void register(UserDto userDto) {
-        if (userRepository.findByUsername(userDto.getUsername()).isPresent()) {
+        if (userRepository.findByUsername(userDto.getUsername()) != null) {
             throw new IllegalArgumentException("Username is already taken");
         }
 
@@ -35,6 +35,6 @@ public class AuthenticationService {
     }
 
     public User findByUsername(String username) {
-        return userRepository.findByUsername(username).orElse(null);
+        return userRepository.findByUsername(username);
     }
 }

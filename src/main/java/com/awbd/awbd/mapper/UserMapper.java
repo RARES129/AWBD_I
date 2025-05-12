@@ -19,7 +19,7 @@ public interface UserMapper {
 //    User toUser(RegisterRequestBody registerRequestBody);
 //    @SubclassMapping(source = Client.class, target = ClientDto.class)
 //    @SubclassMapping(source = Mechanic.class, target = MechanicDto.class)
-//    UserDto ToUserDTO(User User);
+//    MechanicDto toMechanicDto(User User);
 }
 
 

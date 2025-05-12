@@ -28,23 +28,33 @@
           </a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" th:href="@{'/mechanic'}">
+            <i class="fas fa-wrench me-1"></i> Mechanics
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{'/appointment'}">
+            <i class="fas fa-calendar-check me-1"></i> Appointment
+          </a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ms-auto topnav">
+<!--        <li class="nav-item">-->
+<!--          <a class="nav-link btn-primary" th:href="@{'/login'}">-->
+<!--            <i class="fas fa-sign-in-alt"></i> Sign In-->
+<!--          </a>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--          <a class="nav-link btn-primary" th:href="@{'/participant/form'}">-->
+<!--            <i class="fas fa-user-plus"></i> Register-->
+<!--          </a>-->
+<!--        </li>-->
+        <li class="nav-item">
           <form id="logout-form" th:action="@{/logout}" method="post">
             <button type="submit" class="nav-link btn-primary">
               <i class="fas fa-sign-out-alt"></i> Logout
             </button>
           </form>
-        </li>
-      </ul>
-      <ul class="navbar-nav ms-auto topnav">
-        <li class="nav-item">
-          <a class="nav-link btn-primary" th:href="@{'/login'}">
-            <i class="fas fa-sign-in-alt"></i> Sign In
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link btn-primary" th:href="@{'/participant/form'}">
-            <i class="fas fa-user-plus"></i> Register
-          </a>
         </li>
       </ul>
     </div>

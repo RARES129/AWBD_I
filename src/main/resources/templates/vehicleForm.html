@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>AWBD Auction</title>
@@ -20,31 +20,36 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto topnav">
                 <li class="nav-item">
-                    <a class="nav-link " th:href="@{'/vehicle'}">Vehicles</a>
+                    <a class="nav-link" th:href="@{'/vehicle'}">Vehicles</a>
                 </li>
-                <li class="nav-item">
+                <li sec:authorize="hasRole('CLIENT')" class="nav-item">
                     <a class="nav-link btn-primary" th:href="@{'/vehicle/form'}">
                         <i class="fas fa-plus-circle"></i> Add Vehicle
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{'/mechanic'}">
+                        <i class="fas fa-wrench me-1"></i> Mechanics
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto topnav">
+                <!--        <li class="nav-item">-->
+                <!--          <a class="nav-link btn-primary" th:href="@{'/login'}">-->
+                <!--            <i class="fas fa-sign-in-alt"></i> Sign In-->
+                <!--          </a>-->
+                <!--        </li>-->
+                <!--        <li class="nav-item">-->
+                <!--          <a class="nav-link btn-primary" th:href="@{'/participant/form'}">-->
+                <!--            <i class="fas fa-user-plus"></i> Register-->
+                <!--          </a>-->
+                <!--        </li>-->
                 <li class="nav-item">
                     <form id="logout-form" th:action="@{/logout}" method="post">
                         <button type="submit" class="nav-link btn-primary">
                             <i class="fas fa-sign-out-alt"></i> Logout
                         </button>
                     </form>
-                </li>
-            </ul>
-            <ul class="navbar-nav ms-auto topnav">
-                <li class="nav-item">
-                    <a class="nav-link btn-primary" th:href="@{'/login'}">
-                        <i class="fas fa-sign-in-alt"></i> Sign In
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link btn-primary" th:href="@{'/participant/form'}">
-                        <i class="fas fa-user-plus"></i> Register
-                    </a>
                 </li>
             </ul>
         </div>

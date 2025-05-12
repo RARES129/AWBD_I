@@ -29,6 +29,8 @@ public class SecurityJpaConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/webjars/**", "/login", "/register", "/resources/**").permitAll()
                         .requestMatchers("/vehicle/form").hasRole("CLIENT")
+                        .requestMatchers("/mechanic/**").permitAll()
+                        .requestMatchers("/appointment/form").hasAnyRole("CLIENT", "MECHANIC")
                         .requestMatchers("/vehicle/*").hasAnyRole("MECHANIC", "CLIENT")
                         .requestMatchers("/vehicle/*").hasAnyRole("MECHANIC", "CLIENT")
                         .anyRequest().authenticated()

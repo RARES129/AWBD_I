@@ -60,21 +60,27 @@
         <thead class="thead-inverse">
         <tr>
             <th>ID</th>
-            <th>Brand</th>
-            <th>Model</th>
-            <th>Plate Number</th>
+            <th>Date Time</th>
+            <th>
+                <span sec:authorize="hasRole('CLIENT')">Mechanic</span>
+                <span sec:authorize="hasRole('MECHANIC')">Client</span>
+            </th>
+            <th>Vehicle</th>
             <th></th>
             <th></th>
         </tr>
         </thead>
-        <tr th:each="vehicle, stat : ${vehicles}"
+        <tr th:each="appointment, stat : ${appointments}"
             th:class="${stat.odd}? 'table-light':''">
-            <td th:text="${vehicle.id}">1</td>
-            <td th:text="${vehicle.brand}">Vehicle 1</td>
-            <td th:text="${vehicle.model}">Model</td>
-            <td th:text="${vehicle.plateNumber}">Plate Number</td>
-            <td><a href="#" th:href="@{'/vehicle/edit/' + ${vehicle.id}}"><i class="fa-solid fa-pen"></i></a></td>
-            <td><a href="#" th:href="@{'/vehicle/delete/' + ${vehicle.id}}"><i class="fa-solid fa-trash"></i></a></td>
+            <td th:text="${appointment.id}">1</td>
+            <td th:text="${appointment.getDateTime()}">Today</td>
+            <td>
+                <span sec:authorize="hasRole('CLIENT')" th:text="${appointment.mechanic.username}">Mechanic</span>
+                <span sec:authorize="hasRole('MECHANIC')" th:text="${appointment.client.username}">Client</span>
+            </td>
+            <td th:text="${appointment.vehicle.brand + ' ' + appointment.vehicle.model + ' ' + appointment.vehicle.brand}">Vehicle</td>
+<!--            <td><a href="#" th:href="@{'/vehicle/edit/' + ${vehicle.id}}"><i class="fa-solid fa-pen"></i></a></td>-->
+<!--            <td><a href="#" th:href="@{'/vehicle/delete/' + ${vehicle.id}}"><i class="fa-solid fa-trash"></i></a></td>-->
         </tr>
 
     </table>

@@ -5,5 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface MechanicRepository extends JpaRepository<Mechanic, Long> {
+    Mechanic findByUsername(String username);
 }
 
