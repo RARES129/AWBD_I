@@ -19,7 +19,7 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto topnav">
-                <li class="nav-item">
+                <li sec:authorize="hasRole('CLIENT')" class="nav-item">
                     <a class="nav-link" th:href="@{'/vehicle'}">Vehicles</a>
                 </li>
                 <li sec:authorize="hasRole('CLIENT')" class="nav-item">
@@ -27,9 +27,14 @@
                         <i class="fas fa-plus-circle"></i> Add Vehicle
                     </a>
                 </li>
-                <li class="nav-item">
+                <li sec:authorize="hasRole('CLIENT')" class="nav-item">
                     <a class="nav-link" th:href="@{'/mechanic'}">
                         <i class="fas fa-wrench me-1"></i> Mechanics
+                    </a>
+                </li>
+                <li sec:authorize="hasRole('CLIENT') or hasRole('MECHANIC')" class="nav-item">
+                    <a class="nav-link" th:href="@{'/appointment'}">
+                        <i class="fas fa-calendar-check me-1"></i> Appointment
                     </a>
                 </li>
             </ul>
@@ -66,7 +71,7 @@
                 <span sec:authorize="hasRole('MECHANIC')">Client</span>
             </th>
             <th>Vehicle</th>
-            <th></th>
+            <th>Service Types</th>
             <th></th>
         </tr>
         </thead>
@@ -79,7 +84,12 @@
                 <span sec:authorize="hasRole('MECHANIC')" th:text="${appointment.client.username}">Client</span>
             </td>
             <td th:text="${appointment.vehicle.brand + ' ' + appointment.vehicle.model + ' ' + appointment.vehicle.brand}">Vehicle</td>
-<!--            <td><a href="#" th:href="@{'/vehicle/edit/' + ${vehicle.id}}"><i class="fa-solid fa-pen"></i></a></td>-->
+            <td>
+                <span th:each="serviceType, iterStat : ${appointment.serviceTypes}">
+                    <span th:text="${serviceType.name + ' (' + serviceType.price + ')'}"></span><span th:if="${!iterStat.last}">, </span>
+                </span>
+            </td>
+            <!--            <td><a href="#" th:href="@{'/vehicle/edit/' + ${vehicle.id}}"><i class="fa-solid fa-pen"></i></a></td>-->
 <!--            <td><a href="#" th:href="@{'/vehicle/delete/' + ${vehicle.id}}"><i class="fa-solid fa-trash"></i></a></td>-->
         </tr>
 

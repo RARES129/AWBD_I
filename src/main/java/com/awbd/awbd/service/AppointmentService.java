@@ -27,6 +27,7 @@ public class AppointmentService {
     private final VehicleRepository vehicleRepository;
     private final UserRepository userRepository;
     private final AppointmentMapper appointmentMapper;
+    private final ServiceTypeRepository serviceTypeRepository;
 
 //    public List<AppointmentDto> getAllAppointments() {
 //        return appointmentRepository.findAll().stream()
@@ -151,13 +152,7 @@ public class AppointmentService {
 
         System.out.println(appointmentDto.toString());
 
-//        if (appointmentDto.getId() != null) {
-//            appointment = appointmentRepository.findById(appointmentDto.getId())
-//                    .orElseThrow(() -> new RuntimeException("Appointment not found."));
-//            appointmentMapper.updateAppointmentFromDto(appointmentDto, appointment);
-//        } else {
-            appointment = appointmentMapper.toAppointment(appointmentDto, client, mechanicRepository, vehicleRepository);
-//        }
+        appointment = appointmentMapper.toAppointment(appointmentDto, client, mechanicRepository, vehicleRepository, serviceTypeRepository);
         appointmentRepository.save(appointment);
     }
 

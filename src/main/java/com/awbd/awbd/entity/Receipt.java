@@ -17,6 +17,7 @@ public class Receipt {
     private Long id;
 
     private LocalDate issueDate;
+
     private Double totalAmount;
 
     @ManyToOne

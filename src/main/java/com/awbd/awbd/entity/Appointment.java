@@ -34,7 +34,7 @@ public class Appointment {
 
     @ManyToMany
     @JoinTable(
-            name = "appointment_service_types",
+            name = "appointment_service_type",
             joinColumns = @JoinColumn(name = "appointment_id"),
             inverseJoinColumns = @JoinColumn(name = "service_type_id")
     )

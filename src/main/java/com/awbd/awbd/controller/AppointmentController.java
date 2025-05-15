@@ -1,23 +1,15 @@
 package com.awbd.awbd.controller;
 
-import com.awbd.awbd.config.SecurityUtil;
-import com.awbd.awbd.dto.AppointmentCreationDto;
-import com.awbd.awbd.dto.AppointmentDto;
-import com.awbd.awbd.dto.MechanicDto;
-import com.awbd.awbd.dto.VehicleDto;
+import com.awbd.awbd.dto.*;
 import com.awbd.awbd.entity.Appointment;
-import com.awbd.awbd.repository.MechanicRepository;
 import com.awbd.awbd.service.AppointmentService;
-import com.awbd.awbd.service.MechanicService;
+import com.awbd.awbd.service.ServiceTypeService;
 import com.awbd.awbd.service.VehicleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -27,6 +19,7 @@ public class AppointmentController {
 
     private final AppointmentService appointmentService;
     private final VehicleService vehicleService;
+    private final ServiceTypeService serviceTypeService;
 
     @GetMapping("/mechanic/{mechanicId}")
     public String appointmentForm(@PathVariable Long mechanicId, Model model){
@@ -36,6 +29,9 @@ public class AppointmentController {
         model.addAttribute("appointment",  appointment);
         List<VehicleDto> vehicles = vehicleService.findClientVehicles();
         model.addAttribute("vehicles", vehicles);
+        List<ServiceTypeDto> serviceTypes = serviceTypeService.findMechanicServiceTypes(mechanicId);
+        System.out.println(serviceTypes);
+        model.addAttribute("serviceTypes", serviceTypes);
         return "appointmentForm";
     }
 

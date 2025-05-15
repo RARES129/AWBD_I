@@ -26,6 +26,7 @@ public class AuthenticationService {
         User user = switch (userDto.getRole()) {
             case CLIENT -> new Client();
             case MECHANIC -> new Mechanic();
+            case ADMIN -> throw new IllegalArgumentException("Invalid role");
         };
 
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));

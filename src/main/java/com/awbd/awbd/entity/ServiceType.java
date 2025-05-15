@@ -17,12 +17,10 @@ public class ServiceType {
     private Long id;
 
     private String name;
+
     private Double price;
 
-    @ManyToMany()
-    //@ManyToMany(mappedBy = "serviceTypes")
-    private List<Mechanic> mechanics;
-
-    @ManyToMany(mappedBy = "serviceTypes")
-    private List<Appointment> appointments;
+    @ManyToOne
+    @JoinColumn(name = "mechanic_id")
+    private Mechanic mechanic;
 }
