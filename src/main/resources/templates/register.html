@@ -16,13 +16,16 @@
 </head>
 <body class="d-flex justify-content-center align-items-center bg-light">
 <div class="card p-4" style="width: 100%; max-width: 400px;">
-    <form class="form-signin" method="post" th:action="@{/register}">
+    <form class="form-signin" method="post" th:action="@{/register}" th:object="${user}">
         <h2 class="form-signin-heading text-center mb-4">Register</h2>
+        <p th:if="${errorMessage}" class="text-danger text-center" th:text="${errorMessage}"></p>
         <div class="mb-3">
+            <label th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Error</label>
             <label for="username" class="form-label">Username</label>
             <input type="text" id="username" name="username" class="form-control" placeholder="Username" required>
         </div>
         <div class="mb-3">
+            <label th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Error</label>
             <label for="password" class="form-label">Password</label>
             <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
         </div>

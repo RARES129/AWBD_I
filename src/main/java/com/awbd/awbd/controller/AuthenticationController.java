@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 
 @Controller
@@ -22,21 +24,22 @@ public class AuthenticationController {
     public String showRegisterForm(Model model) {
         UserDto user = new UserDto();
         model.addAttribute("user", user);
-        return "register.html";
+        return "register";
     }
 
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute("user")UserDto user,
                            BindingResult result, Model model) {
-        User existingUser = authenticationService.findByUsername(user.getUsername());
-        if(existingUser != null) {
-            return "redirect:/register?fail";
-        }
         if(result.hasErrors()) {
             model.addAttribute("user", user);
             return "/register";
         }
-        authenticationService.register(user);
+        try {
+            authenticationService.register(user);
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "register";
+        }
         return "redirect:/login";
     }
 

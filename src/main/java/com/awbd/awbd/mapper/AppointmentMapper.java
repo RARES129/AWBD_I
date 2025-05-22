@@ -1,9 +1,7 @@
 package com.awbd.awbd.mapper;
 
-import com.awbd.awbd.dto.AppointmentCreationDto;
 import com.awbd.awbd.dto.AppointmentDto;
 import com.awbd.awbd.entity.*;
-import com.awbd.awbd.repository.ClientRepository;
 import com.awbd.awbd.repository.MechanicRepository;
 import com.awbd.awbd.repository.ServiceTypeRepository;
 import com.awbd.awbd.repository.VehicleRepository;
@@ -11,22 +9,15 @@ import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface AppointmentMapper {
-//    @Mapping(target = "client.id", source = "clientId")
-//    @Mapping(target = "mechanic.id", source = "mechanicId")
-//    @Mapping(target = "vehicle.id", source = "vehicleId")
-//    @Mapping(target = "serviceTypes", ignore = true)
-//    Appointment toAppointment(AppointmentCreationDto appointmentCreationDto);
-//
-//    @Mapping(target = "clientId", source = "client.id")
-//    @Mapping(target = "mechanicId", source = "mechanic.id")
-//    @Mapping(target = "vehicleId", source = "vehicle.id")
-//    @Mapping(target = "serviceTypeIds", expression = "java(appointment.getServiceTypes().stream().map(serviceType -> serviceType.getId()).toList())")
-//    AppointmentDto toAppointmentDto(Appointment appointment);
+
+    Logger log = LoggerFactory.getLogger(AppointmentMapper.class);
 
     @Mapping(target = "id", source = "appointmentDto.id")
     @Mapping(target = "client", expression = "java(client)")
@@ -41,23 +32,23 @@ public interface AppointmentMapper {
 
     @Named("mapMechanic")
     default Mechanic mapMechanic(Long mechanicId, @Context MechanicRepository mechanicRepository) {
-        System.out.println("Mapping mechanic with ID: " + mechanicId);
+        log.info("   Mapping mechanic with ID: {}", mechanicId);
         return mechanicId != null ? mechanicRepository.findById(mechanicId).orElse(null) : null;
     }
 
     @Named("mapVehicle")
     default Vehicle mapVehicle(Long vehicleId, @Context VehicleRepository vehicleRepository) {
-        System.out.println("Mapping vehicle with ID: " + vehicleId);
-        return vehicleId != null ? vehicleRepository.findById(vehicleId).orElse(null) : null;
+        log.info("   Mapping vehicle with ID: {}", vehicleId);
+        return vehicleId != null ? vehicleRepository.findVehicleById(vehicleId) : null;
     }
 
     @Named("mapServiceTypes")
     default List<ServiceType> mapServiceTypes(List<Long> serviceTypeIds, @Context ServiceTypeRepository serviceTypeRepository) {
-        System.out.println("Mapping users with IDs: " + serviceTypeIds);
+        log.info("   Mapping service types with IDs: {}", serviceTypeIds);
         return serviceTypeIds != null ?
                 serviceTypeIds.stream()
                         .map(serviceTypeId -> {
-                            System.out.println("Mapping user with ID: " + serviceTypeId);
+                            log.info("      Mapping service type with ID: {}", serviceTypeId);
                             return serviceTypeId != null ? serviceTypeRepository.findById(serviceTypeId).orElse(null) : null;
                         })
                         .toList()

@@ -1,6 +1,5 @@
 package com.awbd.awbd.controller;
 
-
 import com.awbd.awbd.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

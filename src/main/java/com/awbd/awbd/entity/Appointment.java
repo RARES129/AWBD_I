@@ -1,9 +1,12 @@
 package com.awbd.awbd.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,25 +21,37 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "Appointment date and time is required")
+    @FutureOrPresent(message = "Appointment date and time must be in the present or future")
+    @Column(nullable = false)
     private LocalDateTime dateTime;
 
+    @NotNull(message = "Client is required")
     @ManyToOne
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
+    @NotNull(message = "Mechanic is required")
     @ManyToOne
-    @JoinColumn(name = "mechanic_id")
+    @JoinColumn(name = "mechanic_id", nullable = false)
     private Mechanic mechanic;
 
+
+    @NotNull(message = "Vehicle is required")
     @ManyToOne
-    @JoinColumn(name = "vehicle_id")
+    @JoinColumn(name = "vehicle_id", nullable = false)
     private Vehicle vehicle;
 
+    @NotNull(message = "At least one service type is required")
     @ManyToMany
     @JoinTable(
             name = "appointment_service_type",
             joinColumns = @JoinColumn(name = "appointment_id"),
             inverseJoinColumns = @JoinColumn(name = "service_type_id")
     )
-    private List<ServiceType> serviceTypes;
+    private List<ServiceType> serviceTypes = new ArrayList<>();
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "receipt_id")
+    private Receipt receipt;
 }

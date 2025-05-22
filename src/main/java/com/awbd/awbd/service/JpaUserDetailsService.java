@@ -1,25 +1,23 @@
 package com.awbd.awbd.service;
 
-import com.awbd.awbd.entity.*;
+import com.awbd.awbd.entity.Role;
+import com.awbd.awbd.entity.User;
 import com.awbd.awbd.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import java.util.*;
-import java.util.stream.Collectors;
 
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 @Profile("postgres")
 public class JpaUserDetailsService implements UserDetailsService {
 
@@ -28,8 +26,6 @@ public class JpaUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
-
-        log.info(user.toString());
 
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),

@@ -1,25 +1,20 @@
 package com.awbd.awbd.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Entity
+@Embeddable
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class ServiceType {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class ServiceCopy {
 
     @NotBlank(message = "Service name is required")
     @Size(max = 100, message = "Service name must be at most 100 characters")
@@ -30,9 +25,4 @@ public class ServiceType {
     @DecimalMin(value = "0.0", inclusive = false, message = "Price must be positive")
     @Column(nullable = false)
     private Double price;
-
-    @ManyToOne
-    @JoinColumn(name = "mechanic_id", nullable = false)
-    @NotNull(message = "Mechanic must not be null")
-    private Mechanic mechanic;
 }

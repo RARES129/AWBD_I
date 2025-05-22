@@ -37,6 +37,16 @@
                         <i class="fas fa-calendar-check me-1"></i> Appointment
                     </a>
                 </li>
+                <li sec:authorize="hasRole('MECHANIC')" class="nav-item">
+                    <a class="nav-link btn-primary" th:href="@{'/service-type'}">
+                        <i class="fas fa-cogs me-1"></i> Service Types
+                    </a>
+                </li>
+                <li sec:authorize="hasRole('MECHANIC')" class="nav-item">
+                    <a class="nav-link btn-primary" th:href="@{'/service-type/form'}">
+                        <i class="fas fa-plus-circle"></i> Add Service Types
+                    </a>
+                </li>
             </ul>
             <ul class="navbar-nav ms-auto topnav">
                 <!--        <li class="nav-item">-->
@@ -63,6 +73,7 @@
 <form enctype="multipart/form-data" method="post" th:action="@{/appointment}" th:object="${appointment}">
     <input type="hidden" th:field="*{id}" />
     <input type="hidden" th:field="*{mechanicId}" />
+    <input type="hidden" th:field="*{clientId}" />
     <div class="container" style="margin-top: 50px">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -72,10 +83,12 @@
                 <div class="form-group row">
                     <div class="col-md-5">
                         <label>Date & Time</label>
+                        <label th:if="${#fields.hasErrors('dateTime')}" th:errors="*{dateTime}">Error</label>
                             <input class="form-control" th:field="*{dateTime}" type="datetime-local"/>
                         <br>
 
                         <label>Vehicle</label>
+                        <label th:if="${#fields.hasErrors('vehicleId')}" th:errors="*{vehicleId}">Error</label>
                             <select class="form-control" th:field="*{vehicleId}" required>
                                 <option th:each="vehicle : ${vehicles}" th:value="${vehicle.getId()}"
                                         th:text="${vehicle.brand + ' ' + vehicle.model + ' (' + vehicle.plateNumber + ')'}">
@@ -84,6 +97,7 @@
                         <br>
 
                         <label>Service Type</label>
+                        <label th:if="${#fields.hasErrors('serviceTypeIds')}" th:errors="*{serviceTypeIds}">Error</label>
                         <select class="selectpicker form-control" th:field="*{serviceTypeIds}" multiple required>
                             <option th:each="serviceType : ${serviceTypes}" th:value="${serviceType.id}"
                                     th:text="${serviceType.name}">

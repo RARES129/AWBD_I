@@ -28,11 +28,11 @@ public class SecurityJpaConfig {
         return http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/webjars/**", "/login", "/register", "/resources/**").permitAll()
-                        .requestMatchers("/vehicle/form").hasRole("CLIENT")
-                        .requestMatchers("/mechanic/**").permitAll()
-                        .requestMatchers("/appointment/form").hasAnyRole("CLIENT", "MECHANIC")
-                        .requestMatchers("/vehicle/*").hasAnyRole("MECHANIC", "CLIENT")
-                        .requestMatchers("/vehicle/*").hasAnyRole("MECHANIC", "CLIENT")
+                        .requestMatchers("/vehicle/**").hasRole("CLIENT")
+                        .requestMatchers("/mechanic/**").hasRole("CLIENT")
+                        .requestMatchers("/appointment/form").hasRole("CLIENT")
+                        .requestMatchers("/appointment").hasAnyRole("CLIENT", "MECHANIC")
+                        .requestMatchers("/service-type/**").hasRole("MECHANIC")
                         .anyRequest().authenticated()
                 )
                 .userDetailsService(userDetailsService)

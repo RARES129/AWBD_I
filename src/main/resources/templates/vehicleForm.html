@@ -37,6 +37,16 @@
                         <i class="fas fa-calendar-check me-1"></i> Appointment
                     </a>
                 </li>
+                <li sec:authorize="hasRole('MECHANIC')" class="nav-item">
+                    <a class="nav-link btn-primary" th:href="@{'/service-type'}">
+                        <i class="fas fa-cogs me-1"></i> Service Types
+                    </a>
+                </li>
+                <li sec:authorize="hasRole('MECHANIC')" class="nav-item">
+                    <a class="nav-link btn-primary" th:href="@{'/service-type/form'}">
+                        <i class="fas fa-plus-circle"></i> Add Service Types
+                    </a>
+                </li>
             </ul>
             <ul class="navbar-nav ms-auto topnav">
                 <!--        <li class="nav-item">-->
@@ -65,24 +75,28 @@
     <div class="container" style="margin-top: 50px">
         <div class="panel panel-default">
             <div  class="panel-heading">
-                <h3> </h3>
+                <h3>Create Vehicle</h3>
             </div>
 
             <div class="panel-body">
                 <div class="form-group row">
                     <div class="col-md-5 ">
                         <div class="form-row">
-                            <input class="form-control" th:field="*{brand}" type="text" placeholder="vehicle brand"/>
+                            <label>Brand</label>
+                            <label th:if="${#fields.hasErrors('brand')}" th:errors="*{brand}">Error</label>
+                            <input class="form-control" th:field="*{brand}" type="text"/>
                         </div>
                         <br>
                         <div class="form-row">
+                            <label>Model</label>
                             <label th:if="${#fields.hasErrors('model')}" th:errors="*{model}">Error</label>
-                            <input class="form-control" th:field="*{model}" type="text" placeholder="vehicle model"/>
+                            <input class="form-control" th:field="*{model}" type="text"/>
                         </div>
                         <br>
                         <div class="form-row">
+                            <label>Plate Number</label>
                             <label th:if="${#fields.hasErrors('plateNumber')}" th:errors="*{plateNumber}">Error</label>
-                            <input class="form-control" th:field="*{plateNumber}" type="number" placeholder="vehicle plate number"/>
+                            <input class="form-control" th:field="*{plateNumber}" type="text"/>
                         </div>
 
                     </div>

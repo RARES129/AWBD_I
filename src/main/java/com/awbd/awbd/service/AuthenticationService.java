@@ -30,12 +30,8 @@ public class AuthenticationService {
         };
 
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+
         userMapper.updateUserFromRequest(userDto, user);
-
         userRepository.save(user);
-    }
-
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
     }
 }
