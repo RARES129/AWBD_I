@@ -13,8 +13,8 @@ import lombok.experimental.SuperBuilder;
 
 @Data
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @SuperBuilder
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class User {

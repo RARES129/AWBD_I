@@ -2,6 +2,7 @@ package com.awbd.awbd.mapper;
 
 import com.awbd.awbd.dto.AppointmentDto;
 import com.awbd.awbd.entity.*;
+import com.awbd.awbd.exceptions.ResourceNotFoundException;
 import com.awbd.awbd.repository.MechanicRepository;
 import com.awbd.awbd.repository.ServiceTypeRepository;
 import com.awbd.awbd.repository.VehicleRepository;
@@ -39,7 +40,7 @@ public interface AppointmentMapper {
     @Named("mapVehicle")
     default Vehicle mapVehicle(Long vehicleId, @Context VehicleRepository vehicleRepository) {
         log.info("   Mapping vehicle with ID: {}", vehicleId);
-        return vehicleId != null ? vehicleRepository.findVehicleById(vehicleId) : null;
+        return vehicleId != null ? vehicleRepository.findById(vehicleId).orElseThrow(() -> new ResourceNotFoundException("Appointment not found with id: " + vehicleId)) : null;
     }
 
     @Named("mapServiceTypes")

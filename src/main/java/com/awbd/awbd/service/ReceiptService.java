@@ -5,6 +5,7 @@ import com.awbd.awbd.entity.Appointment;
 import com.awbd.awbd.entity.Receipt;
 import com.awbd.awbd.entity.ServiceCopy;
 import com.awbd.awbd.entity.ServiceType;
+import com.awbd.awbd.exceptions.ResourceNotFoundException;
 import com.awbd.awbd.mapper.ReceiptMapper;
 import com.awbd.awbd.repository.AppointmentRepository;
 import com.awbd.awbd.repository.ReceiptRepository;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +24,7 @@ public class ReceiptService {
     private final ReceiptMapper receiptMapper;
 
     public void generateReceiptForAppointment(Long appointmentId) {
-        Appointment appointment = appointmentRepository.findAppointmentById(appointmentId);
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(() -> new ResourceNotFoundException("Appointment not found with id: " + appointmentId));
 
         Receipt receipt = new Receipt();
         receipt.setIssueDate(LocalDate.now());

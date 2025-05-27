@@ -12,7 +12,5 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     List<Appointment> findByServiceTypes_Id(Long serviceTypeId);
     List<Appointment> findByVehicle_Id(Long vehicleId);
     boolean existsByVehicle_Id(Long id);
-
-    Appointment findAppointmentById(Long appointmentId);
 }
 

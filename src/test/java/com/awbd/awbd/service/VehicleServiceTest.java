@@ -1,11 +1,12 @@
 package com.awbd.awbd.service;
 
-import com.awbd.awbd.config.SecurityUtil;
 import com.awbd.awbd.dto.VehicleDto;
 import com.awbd.awbd.entity.Appointment;
 import com.awbd.awbd.entity.Client;
 import com.awbd.awbd.entity.Receipt;
 import com.awbd.awbd.entity.Vehicle;
+import com.awbd.awbd.exceptions.EntityInUnfinishedAppointmentException;
+import com.awbd.awbd.exceptions.ResourceNotFoundException;
 import com.awbd.awbd.mapper.VehicleMapper;
 import com.awbd.awbd.repository.AppointmentRepository;
 import com.awbd.awbd.repository.ClientRepository;
@@ -63,12 +64,21 @@ class VehicleServiceTest {
         Vehicle vehicle = new Vehicle();
         VehicleDto dto = new VehicleDto();
 
-        when(vehicleRepository.findVehicleById(1L)).thenReturn(vehicle);
+        when(vehicleRepository.findById(1L)).thenReturn(Optional.of(vehicle));
         when(vehicleMapper.toVehicleDto(vehicle)).thenReturn(dto);
 
         VehicleDto result = vehicleService.findById(1L);
 
         assertEquals(dto, result);
+    }
+
+    @Test
+    void findById_shouldThrowExceptionIfNotFound() {
+        when(vehicleRepository.findById(2L)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class, () -> vehicleService.findById(2L));
+
+        assertEquals("Vehicle not found with id: 2", ex.getMessage());
     }
 
     @Test
@@ -78,7 +88,7 @@ class VehicleServiceTest {
 
         when(appointmentRepository.findByVehicle_Id(1L)).thenReturn(appointments);
 
-        RuntimeException ex = assertThrows(RuntimeException.class, () -> vehicleService.deleteById(1L));
+        EntityInUnfinishedAppointmentException ex = assertThrows(EntityInUnfinishedAppointmentException.class, () -> vehicleService.deleteById(1L));
         assertEquals("Vehicle is used in an unfinished appointment.", ex.getMessage());
     }
 
@@ -123,7 +133,7 @@ class VehicleServiceTest {
     void ensureNotInUse_shouldThrowIfUsed() {
         when(appointmentRepository.existsByVehicle_Id(1L)).thenReturn(true);
 
-        RuntimeException ex = assertThrows(RuntimeException.class, () -> vehicleService.ensureNotInUse(1L));
+        EntityInUnfinishedAppointmentException ex = assertThrows(EntityInUnfinishedAppointmentException.class, () -> vehicleService.ensureNotInUse(1L));
         assertEquals("Vehicle is used in an unfinished appointment.", ex.getMessage());
     }
 

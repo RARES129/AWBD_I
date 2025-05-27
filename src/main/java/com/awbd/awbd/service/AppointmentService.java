@@ -1,6 +1,5 @@
 package com.awbd.awbd.service;
 
-import com.awbd.awbd.config.SecurityUtil;
 import com.awbd.awbd.dto.AppointmentDto;
 import com.awbd.awbd.entity.Appointment;
 import com.awbd.awbd.entity.Client;

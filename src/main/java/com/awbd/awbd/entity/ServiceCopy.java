@@ -8,10 +8,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+@Data
 @Embeddable
-@Getter
-@Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class ServiceCopy {

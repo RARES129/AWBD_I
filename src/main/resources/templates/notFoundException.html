@@ -24,7 +24,8 @@
                                 <p th:text="${exception.getClass()}">Error</p>
                             </div>
                             <div class="col-md-6">
-                                <p th:text="${exception.getMessage()}">description</p>
+                                <label th:for="exception">Description</label>
+                                <p th:text="${exception.getMessage()}">Description</p>
                             </div>
 
                         </div>

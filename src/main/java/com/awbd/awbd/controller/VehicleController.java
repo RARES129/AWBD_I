@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -48,25 +47,16 @@ public class VehicleController {
     }
 
     @RequestMapping("/edit/{id}")
-    public String edit(@PathVariable String id, Model model, RedirectAttributes redirectAttributes) {
-        try {
-            vehicleService.ensureNotInUse(Long.valueOf(id));
-        } catch (RuntimeException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            return "redirect:/vehicle";
-        }
+    public String edit(@PathVariable String id, Model model) {
+        vehicleService.ensureNotInUse(Long.valueOf(id));
         VehicleDto vehicle = vehicleService.findById(Long.valueOf(id));
         model.addAttribute("vehicle", vehicle);
         return "vehicleForm";
     }
 
     @RequestMapping("/delete/{id}")
-    public String deleteById(@PathVariable String id, RedirectAttributes redirectAttributes) {
-        try {
-            vehicleService.deleteById(Long.valueOf(id));
-        } catch (RuntimeException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-        }
+    public String deleteById(@PathVariable String id) {
+        vehicleService.deleteById(Long.valueOf(id));
         return "redirect:/vehicle";
     }
 }

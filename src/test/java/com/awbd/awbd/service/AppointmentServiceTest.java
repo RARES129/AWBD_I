@@ -1,6 +1,5 @@
 package com.awbd.awbd.service;
 
-import com.awbd.awbd.config.SecurityUtil;
 import com.awbd.awbd.dto.AppointmentDto;
 import com.awbd.awbd.entity.*;
 import com.awbd.awbd.mapper.AppointmentMapper;
@@ -13,7 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -31,19 +29,10 @@ class AppointmentServiceTest {
     private ClientRepository clientRepository;
 
     @Mock
-    private MechanicRepository mechanicRepository;
-
-    @Mock
-    private VehicleRepository vehicleRepository;
-
-    @Mock
     private UserRepository userRepository;
 
     @Mock
     private AppointmentMapper appointmentMapper;
-
-    @Mock
-    private ServiceTypeRepository serviceTypeRepository;
 
     private AppointmentDto appointmentDto;
     private Client client;

@@ -1,7 +1,6 @@
 package com.awbd.awbd.controller;
 
 import com.awbd.awbd.dto.UserDto;
-import com.awbd.awbd.entity.User;
 import com.awbd.awbd.service.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,12 +33,7 @@ public class AuthenticationController {
             model.addAttribute("user", user);
             return "/register";
         }
-        try {
-            authenticationService.register(user);
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "register";
-        }
+        authenticationService.register(user);
         return "redirect:/login";
     }
 

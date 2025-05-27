@@ -61,9 +61,7 @@ class JpaUserDetailsServiceTest {
     void loadUserByUsername_ShouldThrowException_WhenUserNotFound() {
         when(userRepository.findByUsername("john")).thenReturn(null);
 
-        assertThrows(UsernameNotFoundException.class, () -> {
-            jpaUserDetailsService.loadUserByUsername("john");
-        });
+        assertThrows(UsernameNotFoundException.class, () -> jpaUserDetailsService.loadUserByUsername("john"));
 
         verify(userRepository, times(1)).findByUsername("john");
     }

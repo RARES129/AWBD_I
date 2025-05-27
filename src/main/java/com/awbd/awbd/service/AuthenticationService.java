@@ -4,6 +4,7 @@ import com.awbd.awbd.dto.UserDto;
 import com.awbd.awbd.entity.Client;
 import com.awbd.awbd.entity.Mechanic;
 import com.awbd.awbd.entity.User;
+import com.awbd.awbd.exceptions.IllegalArgumentWithViewException;
 import com.awbd.awbd.mapper.UserMapper;
 import com.awbd.awbd.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,11 @@ public class AuthenticationService {
 
     public void register(UserDto userDto) {
         if (userRepository.findByUsername(userDto.getUsername()) != null) {
-            throw new IllegalArgumentException("Username is already taken");
+            throw new IllegalArgumentWithViewException(
+                    "Username is already taken",
+                    "user",
+                    userDto,
+                    "register");
         }
 
         User user = switch (userDto.getRole()) {

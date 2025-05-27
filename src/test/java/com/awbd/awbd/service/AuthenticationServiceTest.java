@@ -5,6 +5,7 @@ import com.awbd.awbd.entity.Client;
 import com.awbd.awbd.entity.Mechanic;
 import com.awbd.awbd.entity.Role;
 import com.awbd.awbd.entity.User;
+import com.awbd.awbd.exceptions.IllegalArgumentWithViewException;
 import com.awbd.awbd.mapper.UserMapper;
 import com.awbd.awbd.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,7 +55,7 @@ class AuthenticationServiceTest {
         verify(userMapper).updateUserFromRequest(eq(userDto), userCaptor.capture());
         verify(userRepository).save(userCaptor.getValue());
 
-        assertTrue(userCaptor.getValue() instanceof Client);
+        assertInstanceOf(Client.class, userCaptor.getValue());
         assertEquals("encodedpass", userDto.getPassword());
     }
 
@@ -71,7 +72,7 @@ class AuthenticationServiceTest {
         verify(userMapper).updateUserFromRequest(eq(userDto), userCaptor.capture());
         verify(userRepository).save(userCaptor.getValue());
 
-        assertTrue(userCaptor.getValue() instanceof Mechanic);
+        assertInstanceOf(Mechanic.class, userCaptor.getValue());
         assertEquals("encodedpass", userDto.getPassword());
     }
 
@@ -81,10 +82,14 @@ class AuthenticationServiceTest {
 
         when(userRepository.findByUsername("testuser")).thenReturn(mock(User.class));
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+        IllegalArgumentWithViewException exception = assertThrows(IllegalArgumentWithViewException.class, () ->
                 authenticationService.register(userDto));
 
         assertEquals("Username is already taken", exception.getMessage());
+        assertEquals("user", exception.getAttributeName());
+        assertEquals(userDto, exception.getAttributeValue());
+        assertEquals("register", exception.getViewName());
+
         verify(userRepository, never()).save(any());
     }
 

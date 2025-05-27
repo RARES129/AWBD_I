@@ -1,7 +1,6 @@
 package com.awbd.awbd.controller;
 
 import com.awbd.awbd.dto.ServiceTypeDto;
-import com.awbd.awbd.entity.ServiceType;
 import com.awbd.awbd.service.ServiceTypeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -33,7 +31,6 @@ public class ServiceTypeController {
         if (bindingResult.hasErrors()){
             return "serviceTypeForm";
         }
-
         serviceTypeService.save(serviceType);
         return "redirect:/service-type";
     }
@@ -53,12 +50,8 @@ public class ServiceTypeController {
     }
 
     @RequestMapping("/delete/{id}")
-    public String deleteById(@PathVariable String id, RedirectAttributes redirectAttributes){
-        try {
-            serviceTypeService.deleteById(Long.valueOf(id));
-        } catch (RuntimeException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-        }
+    public String deleteById(@PathVariable String id){
+        serviceTypeService.deleteById(Long.valueOf(id));
         return "redirect:/service-type";
     }
 }

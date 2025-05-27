@@ -9,10 +9,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Getter
-@Setter
 @Data
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 public class Appointment {
@@ -39,7 +37,7 @@ public class Appointment {
 
     @NotNull(message = "Vehicle is required")
     @ManyToOne
-    @JoinColumn(name = "vehicle_id", nullable = false)
+    @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
 
     @NotNull(message = "At least one service type is required")

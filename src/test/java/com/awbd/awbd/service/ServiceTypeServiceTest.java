@@ -1,11 +1,12 @@
 package com.awbd.awbd.service;
 
-import com.awbd.awbd.config.SecurityUtil;
 import com.awbd.awbd.dto.ServiceTypeDto;
 import com.awbd.awbd.entity.Appointment;
 import com.awbd.awbd.entity.Mechanic;
 import com.awbd.awbd.entity.ServiceType;
 import com.awbd.awbd.entity.Receipt;
+import com.awbd.awbd.exceptions.EntityInUnfinishedAppointmentException;
+import com.awbd.awbd.exceptions.ResourceNotFoundException;
 import com.awbd.awbd.mapper.ServiceTypeMapper;
 import com.awbd.awbd.repository.AppointmentRepository;
 import com.awbd.awbd.repository.MechanicRepository;
@@ -36,11 +37,9 @@ class ServiceTypeServiceTest {
     @Mock
     private AppointmentRepository appointmentRepository;
 
-    private AutoCloseable closeable;
-
     @BeforeEach
     void setUp() {
-        closeable = MockitoAnnotations.openMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
@@ -119,7 +118,7 @@ class ServiceTypeServiceTest {
 
         when(appointmentRepository.findByServiceTypes_Id(1L)).thenReturn(List.of(unfinishedAppointment));
 
-        RuntimeException ex = assertThrows(RuntimeException.class, () -> service.deleteById(1L));
+        EntityInUnfinishedAppointmentException ex = assertThrows(EntityInUnfinishedAppointmentException.class, () -> service.deleteById(1L));
         assertEquals("Service Type is used in an unfinished appointment.", ex.getMessage());
     }
 
@@ -140,7 +139,7 @@ class ServiceTypeServiceTest {
     void findById_shouldThrowExceptionIfNotFound() {
         when(serviceTypeRepository.findById(5L)).thenReturn(Optional.empty());
 
-        RuntimeException ex = assertThrows(RuntimeException.class, () -> service.findById(5L));
-        assertEquals("Service Type not found.", ex.getMessage());
+        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class, () -> service.findById(5L));
+        assertEquals("Service Type not found with id: 5", ex.getMessage());
     }
 }

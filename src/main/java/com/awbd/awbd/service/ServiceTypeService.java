@@ -1,10 +1,11 @@
 package com.awbd.awbd.service;
 
-import com.awbd.awbd.config.SecurityUtil;
 import com.awbd.awbd.dto.ServiceTypeDto;
 import com.awbd.awbd.entity.Appointment;
 import com.awbd.awbd.entity.Mechanic;
 import com.awbd.awbd.entity.ServiceType;
+import com.awbd.awbd.exceptions.EntityInUnfinishedAppointmentException;
+import com.awbd.awbd.exceptions.ResourceNotFoundException;
 import com.awbd.awbd.mapper.ServiceTypeMapper;
 import com.awbd.awbd.repository.AppointmentRepository;
 import com.awbd.awbd.repository.MechanicRepository;
@@ -54,7 +55,7 @@ public class ServiceTypeService {
     public void deleteById(Long id) {
         List<Appointment> appointments = appointmentRepository.findByServiceTypes_Id(id);
         if (appointments.stream().anyMatch(appointment -> appointment.getReceipt() == null)){
-            throw new RuntimeException("Service Type is used in an unfinished appointment.");
+            throw new EntityInUnfinishedAppointmentException("Service Type");
         }
 
         for (Appointment appointment : appointments) {
@@ -67,7 +68,7 @@ public class ServiceTypeService {
 
     public ServiceTypeDto findById(Long id) {
         ServiceType serviceType = serviceTypeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Service Type not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("Service Type not found with id: " + id));
         return serviceTypeMapper.toServiceTypeDto(serviceType);
     }
 }

@@ -1,16 +1,16 @@
 package com.awbd.awbd.service;
 
-import com.awbd.awbd.config.SecurityUtil;
 import com.awbd.awbd.dto.VehicleDto;
 import com.awbd.awbd.entity.Appointment;
 import com.awbd.awbd.entity.Client;
 import com.awbd.awbd.entity.Vehicle;
+import com.awbd.awbd.exceptions.EntityInUnfinishedAppointmentException;
+import com.awbd.awbd.exceptions.ResourceNotFoundException;
 import com.awbd.awbd.mapper.VehicleMapper;
 import com.awbd.awbd.repository.AppointmentRepository;
 import com.awbd.awbd.repository.ClientRepository;
 import com.awbd.awbd.repository.VehicleRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +35,7 @@ public class VehicleService {
     }
 
     public VehicleDto findById(Long id) {
-        Vehicle vehicle = vehicleRepository.findVehicleById(id);
+        Vehicle vehicle = vehicleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Vehicle not found with id: " + id));
         return vehicleMapper.toVehicleDto(vehicle);
     }
 
@@ -43,7 +43,7 @@ public class VehicleService {
     public void deleteById(Long id) {
         List<Appointment> appointments = appointmentRepository.findByVehicle_Id(id);
         if (appointments.stream().anyMatch(appointment -> appointment.getReceipt() == null)){
-            throw new RuntimeException("Vehicle is used in an unfinished appointment.");
+            throw new EntityInUnfinishedAppointmentException("Vehicle");
         }
 
         for (Appointment appointment : appointments) {
@@ -66,7 +66,7 @@ public class VehicleService {
 
     public void ensureNotInUse(Long id) {
         if (appointmentRepository.existsByVehicle_Id(id)) {
-            throw new RuntimeException("Vehicle is used in an unfinished appointment.");
+            throw new EntityInUnfinishedAppointmentException("Vehicle");
         }
     }
 }

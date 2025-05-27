@@ -2,6 +2,7 @@ package com.awbd.awbd.service;
 
 import com.awbd.awbd.dto.ReceiptDto;
 import com.awbd.awbd.entity.*;
+import com.awbd.awbd.exceptions.ResourceNotFoundException;
 import com.awbd.awbd.mapper.ReceiptMapper;
 import com.awbd.awbd.repository.AppointmentRepository;
 import com.awbd.awbd.repository.ReceiptRepository;
@@ -11,6 +12,7 @@ import org.mockito.ArgumentCaptor;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -56,7 +58,7 @@ class ReceiptServiceTest {
         appointment.setVehicle(vehicle);
         appointment.setServiceTypes(List.of(service1, service2));
 
-        when(appointmentRepository.findAppointmentById(appointmentId)).thenReturn(appointment);
+        when(appointmentRepository.findById(appointmentId)).thenReturn(Optional.of(appointment));
 
         // Act
         receiptService.generateReceiptForAppointment(appointmentId);
@@ -76,6 +78,16 @@ class ReceiptServiceTest {
         assertEquals(2, savedReceipt.getServices().size());
         assertEquals(350.0, savedReceipt.getTotalAmount());
         assertEquals(LocalDate.now(), savedReceipt.getIssueDate());
+    }
+
+    @Test
+    void generateReceiptForAppointment_ShouldThrowException_WhenAppointmentNotFound() {
+        Long nonExistentAppointmentId = 999L;
+        when(appointmentRepository.findById(nonExistentAppointmentId)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class, () -> receiptService.generateReceiptForAppointment(nonExistentAppointmentId));
+
+        assertEquals("Appointment not found with id: 999", ex.getMessage());
     }
 
     @Test
