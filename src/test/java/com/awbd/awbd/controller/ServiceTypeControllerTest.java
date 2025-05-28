@@ -7,10 +7,16 @@ import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Collections;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -68,10 +74,16 @@ class ServiceTypeControllerTest {
     @Test
     @WithMockUser(username = "testUser", password = "12345", roles = "MECHANIC")
     void testServiceTypeList() throws Exception {
+        Page<ServiceTypeDto> serviceTypePage = new PageImpl<>(Collections.emptyList(), PageRequest.of(0, 5), 0);
+        when(serviceTypeService.findMechanicServiceTypesPaginated(PageRequest.of(0, 5, Sort.by("id"))))
+                .thenReturn(serviceTypePage);
+
         mockMvc.perform(get("/service-type"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("serviceTypeList"))
-                .andExpect(model().attributeExists("serviceTypes"));
+                .andExpect(model().attributeExists("serviceTypePage"))
+                .andExpect(model().attributeExists("currentPage"))
+                .andExpect(model().attributeExists("sortBy"));
     }
 
     @Test

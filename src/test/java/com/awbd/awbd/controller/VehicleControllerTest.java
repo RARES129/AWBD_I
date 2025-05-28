@@ -7,6 +7,10 @@ import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -70,12 +74,16 @@ class VehicleControllerTest {
     @Test
     @WithMockUser(username = "testUser", password = "12345", roles = "CLIENT")
     void testVehicleList() throws Exception {
-        when(vehicleService.findClientVehicles()).thenReturn(Collections.emptyList());
+        Page<VehicleDto> vehiclePage = new PageImpl<>(Collections.emptyList(), PageRequest.of(0, 5), 0);
+        when(vehicleService.findClientVehiclesPaginated(PageRequest.of(0, 5, Sort.by("id"))))
+                .thenReturn(vehiclePage);
 
         mockMvc.perform(get("/vehicle"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("vehicleList"))
-                .andExpect(model().attributeExists("vehicles"));
+                .andExpect(model().attributeExists("vehiclePage"))
+                .andExpect(model().attributeExists("currentPage"))
+                .andExpect(model().attributeExists("sortBy"));
     }
 
     @Test

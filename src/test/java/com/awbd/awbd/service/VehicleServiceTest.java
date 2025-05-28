@@ -14,6 +14,10 @@ import com.awbd.awbd.repository.VehicleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.*;
 
@@ -126,6 +130,29 @@ class VehicleServiceTest {
             List<VehicleDto> result = vehicleService.findClientVehicles();
 
             assertEquals(1, result.size());
+        }
+    }
+
+    @Test
+    void findClientVehiclesPaginated_shouldReturnPagedVehicleDtos() {
+        Client client = new Client();
+        client.setId(1L);
+        Vehicle vehicle = new Vehicle();
+        VehicleDto dto = new VehicleDto();
+        Pageable pageable = PageRequest.of(0, 5);
+        Page<Vehicle> vehiclePage = new PageImpl<>(List.of(vehicle));
+
+        try (MockedStatic<SecurityUtil> mocked = mockStatic(SecurityUtil.class)) {
+            mocked.when(SecurityUtil::getSessionUsername).thenReturn("client1");
+
+            when(clientRepository.findByUsername("client1")).thenReturn(client);
+            when(vehicleRepository.findByOwnerId(1L, pageable)).thenReturn(vehiclePage);
+            when(vehicleMapper.toVehicleDto(vehicle)).thenReturn(dto);
+
+            Page<VehicleDto> result = vehicleService.findClientVehiclesPaginated(pageable);
+
+            assertEquals(1, result.getTotalElements());
+            assertEquals(dto, result.getContent().getFirst());
         }
     }
 

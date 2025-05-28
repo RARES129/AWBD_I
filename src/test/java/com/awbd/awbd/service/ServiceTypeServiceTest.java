@@ -14,6 +14,10 @@ import com.awbd.awbd.repository.ServiceTypeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.*;
 
@@ -78,6 +82,30 @@ class ServiceTypeServiceTest {
             verify(serviceTypeMapper).toServiceTypeDto(st);
         }
     }
+
+    @Test
+    void findMechanicServiceTypesPaginated_shouldReturnPagedServiceTypeDtos() {
+        Mechanic mechanic = new Mechanic();
+        mechanic.setId(1L);
+        ServiceType serviceType = new ServiceType();
+        ServiceTypeDto dto = new ServiceTypeDto();
+        Pageable pageable = PageRequest.of(0, 5);
+        Page<ServiceType> serviceTypePage = new PageImpl<>(List.of(serviceType));
+
+        try (MockedStatic<SecurityUtil> mocked = mockStatic(SecurityUtil.class)) {
+            mocked.when(SecurityUtil::getSessionUsername).thenReturn("mechanic1");
+
+            when(mechanicRepository.findByUsername("mechanic1")).thenReturn(mechanic);
+            when(serviceTypeRepository.findByMechanicId(1L, pageable)).thenReturn(serviceTypePage);
+            when(serviceTypeMapper.toServiceTypeDto(serviceType)).thenReturn(dto);
+
+            Page<ServiceTypeDto> result = service.findMechanicServiceTypesPaginated(pageable);
+
+            assertEquals(1, result.getTotalElements());
+            assertEquals(dto, result.getContent().getFirst());
+        }
+    }
+
 
 
     @Test

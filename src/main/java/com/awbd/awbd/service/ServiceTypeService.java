@@ -11,6 +11,8 @@ import com.awbd.awbd.repository.AppointmentRepository;
 import com.awbd.awbd.repository.MechanicRepository;
 import com.awbd.awbd.repository.ServiceTypeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +44,14 @@ public class ServiceTypeService {
                 .stream()
                 .map(serviceTypeMapper::toServiceTypeDto)
                 .toList();
+    }
+
+    public Page<ServiceTypeDto> findMechanicServiceTypesPaginated(Pageable pageable) {
+        String username = SecurityUtil.getSessionUsername();
+        Mechanic mechanic = mechanicRepository.findByUsername(username);
+
+        return serviceTypeRepository.findByMechanicId(mechanic.getId(), pageable)
+                .map(serviceTypeMapper::toServiceTypeDto);
     }
 
     public List<ServiceTypeDto> findMechanicServiceTypes(Long mechanicId) {

@@ -4,13 +4,13 @@ import com.awbd.awbd.dto.VehicleDto;
 import com.awbd.awbd.service.VehicleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,9 +40,14 @@ public class VehicleController {
     }
 
     @RequestMapping("")
-    public String vehicleList(Model model) {
-        List<VehicleDto> vehicles = vehicleService.findClientVehicles();
-        model.addAttribute("vehicles", vehicles);
+    public String vehicleList(Model model,
+                              @RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "5") int size,
+                              @RequestParam(defaultValue = "id") String sortBy) {
+        Page<VehicleDto> vehiclePage = vehicleService.findClientVehiclesPaginated(PageRequest.of(page, size, Sort.by(sortBy)));
+        model.addAttribute("vehiclePage", vehiclePage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("sortBy", sortBy);
         return "vehicleList";
     }
 

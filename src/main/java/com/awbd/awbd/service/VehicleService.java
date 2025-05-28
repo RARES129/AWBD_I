@@ -11,6 +11,8 @@ import com.awbd.awbd.repository.AppointmentRepository;
 import com.awbd.awbd.repository.ClientRepository;
 import com.awbd.awbd.repository.VehicleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,6 +64,14 @@ public class VehicleService {
                 .stream()
                 .map(vehicleMapper::toVehicleDto)
                 .toList();
+    }
+
+    public Page<VehicleDto> findClientVehiclesPaginated(Pageable pageable) {
+        String username = SecurityUtil.getSessionUsername();
+        Client client = clientRepository.findByUsername(username);
+
+        return vehicleRepository.findByOwnerId(client.getId(), pageable)
+                .map(vehicleMapper::toVehicleDto);
     }
 
     public void ensureNotInUse(Long id) {

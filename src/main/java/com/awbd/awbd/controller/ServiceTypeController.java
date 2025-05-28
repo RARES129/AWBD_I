@@ -4,6 +4,9 @@ import com.awbd.awbd.dto.ServiceTypeDto;
 import com.awbd.awbd.service.ServiceTypeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,9 +39,14 @@ public class ServiceTypeController {
     }
 
     @RequestMapping("")
-    public String serviceTypeList(Model model) {
-        List<ServiceTypeDto> serviceTypes = serviceTypeService.findMechanicServiceTypes();
-        model.addAttribute("serviceTypes",serviceTypes);
+    public String serviceTypeList(Model model,
+                                  @RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "5") int size,
+                                  @RequestParam(defaultValue = "id") String sortBy) {
+        Page<ServiceTypeDto> serviceTypePage = serviceTypeService.findMechanicServiceTypesPaginated(PageRequest.of(page, size, Sort.by(sortBy)));
+        model.addAttribute("serviceTypePage",serviceTypePage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("sortBy", sortBy);
         return "serviceTypeList";
     }
 
