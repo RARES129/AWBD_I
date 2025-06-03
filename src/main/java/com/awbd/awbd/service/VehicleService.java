@@ -28,12 +28,12 @@ public class VehicleService {
     private final AppointmentRepository appointmentRepository;
 
     @Transactional
-    public void save(VehicleDto vehicleDto) {
+    public VehicleDto save(VehicleDto vehicleDto) {
         String username = SecurityUtil.getSessionUsername();
         Client client = clientRepository.findByUsername(username);
 
         Vehicle vehicle = vehicleMapper.toVehicle(vehicleDto, client);
-        vehicleRepository.save(vehicle);
+        return vehicleMapper.toVehicleDto(vehicleRepository.save(vehicle));
     }
 
     public VehicleDto findById(Long id) {

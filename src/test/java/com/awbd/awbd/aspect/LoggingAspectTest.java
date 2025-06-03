@@ -36,7 +36,6 @@ public class LoggingAspectTest {
 
     @Test
     void testLogAroundMethod_throwsException() throws Throwable {
-        // Arrange
         Signature signature = mock(Signature.class);
         when(signature.toShortString()).thenReturn("void someMethod()");
         when(joinPoint.getSignature()).thenReturn(signature);
@@ -44,7 +43,6 @@ public class LoggingAspectTest {
         when(joinPoint.getArgs()).thenReturn(new Object[0]);
         when(joinPoint.proceed()).thenThrow(new RuntimeException("failure"));
 
-        // Act & Assert
         RuntimeException thrown = assertThrows(RuntimeException.class, () -> loggingAspect.logAroundMethod(joinPoint));
         assertEquals("failure", thrown.getMessage());
 

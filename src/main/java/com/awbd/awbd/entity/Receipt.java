@@ -13,6 +13,7 @@ import java.util.List;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Receipt {
@@ -45,6 +46,7 @@ public class Receipt {
     @JoinColumn(name = "mechanic_id", nullable = false)
     private Mechanic mechanic;
 
+    @ToString.Exclude
     @OneToOne(mappedBy = "receipt")
     private Appointment appointment;
 

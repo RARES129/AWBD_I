@@ -37,7 +37,7 @@ class ReceiptMapperTest {
         appointment.setDateTime(LocalDateTime.of(2025, 5, 26, 15, 30));
 
         List<ServiceCopy> services = new ArrayList<>();
-        ServiceCopy s1 = new ServiceCopy(); // assuming empty constructor + setters
+        ServiceCopy s1 = new ServiceCopy();
         services.add(s1);
 
         Receipt receipt = new Receipt();
@@ -65,7 +65,7 @@ class ReceiptMapperTest {
         assertEquals(receipt.getVehicle(), dto.getVehicle());
         assertNotNull(dto.getServices());
         assertEquals(1, dto.getServices().size());
-        assertNotSame(services, dto.getServices()); // ensure copy, not same list reference
+        assertNotSame(services, dto.getServices());
     }
 
     @Test
@@ -77,7 +77,6 @@ class ReceiptMapperTest {
     void testToReceiptDto_nullNestedClientMechanicAppointment() {
         Receipt receipt = new Receipt();
         receipt.setId(11L);
-        // no client, mechanic or appointment set (all null)
         receipt.setServices(null);
 
         ReceiptDto dto = receiptMapper.toReceiptDto(receipt);
@@ -90,7 +89,7 @@ class ReceiptMapperTest {
         assertNull(dto.getMechanicUsername());
         assertNull(dto.getAppointmentId());
         assertNull(dto.getAppointmentDateTime());
-        assertNull(dto.getServices()); // services list null in entity means null in DTO
+        assertNull(dto.getServices());
     }
 
     @Test

@@ -8,7 +8,11 @@ import com.awbd.awbd.repository.AppointmentRepository;
 import com.awbd.awbd.repository.ReceiptRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,12 +21,20 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class ReceiptServiceTest {
 
-    private ReceiptRepository receiptRepository;
-    private AppointmentRepository appointmentRepository;
-    private ReceiptMapper receiptMapper;
+    @InjectMocks
     private ReceiptService receiptService;
+
+    @Mock
+    private ReceiptRepository receiptRepository;
+
+    @Mock
+    private AppointmentRepository appointmentRepository;
+
+    @Mock
+    private ReceiptMapper receiptMapper;
 
     @BeforeEach
     void setUp() {
@@ -34,7 +46,6 @@ class ReceiptServiceTest {
 
     @Test
     void generateReceiptForAppointment_ShouldCreateAndSaveReceipt() {
-        // Arrange
         Long appointmentId = 1L;
         Client client = new Client();
         Mechanic mechanic = new Mechanic();
@@ -60,10 +71,8 @@ class ReceiptServiceTest {
 
         when(appointmentRepository.findById(appointmentId)).thenReturn(Optional.of(appointment));
 
-        // Act
         receiptService.generateReceiptForAppointment(appointmentId);
 
-        // Assert
         ArgumentCaptor<Appointment> appointmentCaptor = ArgumentCaptor.forClass(Appointment.class);
         verify(appointmentRepository).save(appointmentCaptor.capture());
 
@@ -92,7 +101,6 @@ class ReceiptServiceTest {
 
     @Test
     void getReceiptByAppointmentId_ShouldReturnReceiptDto() {
-        // Arrange
         Long appointmentId = 1L;
         Receipt receipt = new Receipt();
         ReceiptDto receiptDto = new ReceiptDto();
@@ -100,10 +108,8 @@ class ReceiptServiceTest {
         when(receiptRepository.findByAppointmentId(appointmentId)).thenReturn(receipt);
         when(receiptMapper.toReceiptDto(receipt)).thenReturn(receiptDto);
 
-        // Act
         ReceiptDto result = receiptService.getReceiptByAppointmentId(appointmentId);
 
-        // Assert
         assertNotNull(result);
         assertEquals(receiptDto, result);
     }

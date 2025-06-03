@@ -31,6 +31,12 @@ public interface AppointmentMapper {
                               @Context VehicleRepository vehicleRepository,
                               @Context ServiceTypeRepository serviceTypeRepository);
 
+    @Mapping(target = "id", source = "appointment.id")
+    @Mapping(target = "mechanicId", source = "appointment.mechanic.id")
+    @Mapping(target = "vehicleId", source = "appointment.vehicle.id")
+    @Mapping(target = "serviceTypeIds", source = "appointment.serviceTypes", qualifiedByName = "mapServiceTypeIds")
+    AppointmentDto toAppointmentDto(Appointment appointment);
+
     @Named("mapMechanic")
     default Mechanic mapMechanic(Long mechanicId, @Context MechanicRepository mechanicRepository) {
         log.info("   Mapping mechanic with ID: {}", mechanicId);
@@ -54,4 +60,17 @@ public interface AppointmentMapper {
                         })
                         .toList()
                 : null;    }
+
+    @Named("mapServiceTypeIds")
+    default List<Long> mapServiceTypeIds(List<ServiceType> serviceTypes) {
+        log.info("   Mapping service types to their IDs");
+        return serviceTypes != null ?
+                serviceTypes.stream()
+                        .map(serviceType -> {
+                            log.info("      Mapping service type to ID: {}", serviceType.getId());
+                            return serviceType.getId();
+                        })
+                        .toList()
+                : null;
+    }
 }

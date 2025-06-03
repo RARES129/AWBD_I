@@ -3,27 +3,33 @@ package com.awbd.awbd.service;
 import com.awbd.awbd.dto.ServiceTypeDto;
 import com.awbd.awbd.entity.Appointment;
 import com.awbd.awbd.entity.Mechanic;
-import com.awbd.awbd.entity.ServiceType;
 import com.awbd.awbd.entity.Receipt;
+import com.awbd.awbd.entity.ServiceType;
 import com.awbd.awbd.exceptions.EntityInUnfinishedAppointmentException;
 import com.awbd.awbd.exceptions.ResourceNotFoundException;
 import com.awbd.awbd.mapper.ServiceTypeMapper;
 import com.awbd.awbd.repository.AppointmentRepository;
 import com.awbd.awbd.repository.MechanicRepository;
 import com.awbd.awbd.repository.ServiceTypeRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class ServiceTypeServiceTest {
 
     @InjectMocks
@@ -40,11 +46,6 @@ class ServiceTypeServiceTest {
 
     @Mock
     private AppointmentRepository appointmentRepository;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     void save_shouldSaveServiceType() {
@@ -105,7 +106,6 @@ class ServiceTypeServiceTest {
             assertEquals(dto, result.getContent().getFirst());
         }
     }
-
 
 
     @Test

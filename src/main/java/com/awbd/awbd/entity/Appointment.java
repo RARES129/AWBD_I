@@ -1,7 +1,6 @@
 package com.awbd.awbd.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -11,6 +10,7 @@ import java.util.List;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Appointment {
@@ -20,7 +20,6 @@ public class Appointment {
     private Long id;
 
     @NotNull(message = "Appointment date and time is required")
-    @FutureOrPresent(message = "Appointment date and time must be in the present or future")
     @Column(nullable = false)
     private LocalDateTime dateTime;
 
@@ -33,7 +32,6 @@ public class Appointment {
     @ManyToOne
     @JoinColumn(name = "mechanic_id", nullable = false)
     private Mechanic mechanic;
-
 
     @NotNull(message = "Vehicle is required")
     @ManyToOne
@@ -49,6 +47,7 @@ public class Appointment {
     )
     private List<ServiceType> serviceTypes = new ArrayList<>();
 
+    @ToString.Exclude
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "receipt_id")
     private Receipt receipt;

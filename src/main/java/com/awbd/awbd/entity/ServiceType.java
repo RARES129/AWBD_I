@@ -9,6 +9,7 @@ import lombok.*;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ServiceType {
@@ -27,6 +28,7 @@ public class ServiceType {
     @Column(nullable = false)
     private Double price;
 
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "mechanic_id", nullable = false)
     @NotNull(message = "Mechanic must not be null")

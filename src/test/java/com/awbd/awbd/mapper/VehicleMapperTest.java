@@ -19,7 +19,6 @@ class VehicleMapperTest {
 
     @Test
     void toVehicle_withValidDtoAndClient_mapsAllFields() {
-        // Arrange
         VehicleDto vehicleDto = new VehicleDto();
         vehicleDto.setId(1L);
         vehicleDto.setBrand("Toyota");
@@ -32,10 +31,8 @@ class VehicleMapperTest {
                 .password("pass123")
                 .build();
 
-        // Act
         Vehicle vehicle = mapper.toVehicle(vehicleDto, client);
 
-        // Assert
         assertNotNull(vehicle);
         assertEquals(vehicleDto.getId(), vehicle.getId());
         assertEquals(vehicleDto.getBrand(), vehicle.getBrand());
@@ -53,17 +50,14 @@ class VehicleMapperTest {
 
     @Test
     void toVehicleDto_withValidVehicle_mapsAllFields() {
-        // Arrange
         Vehicle vehicle = new Vehicle();
         vehicle.setId(2L);
         vehicle.setBrand("BMW");
         vehicle.setModel("X5");
         vehicle.setPlateNumber("CJ45XYZ");
 
-        // Act
         VehicleDto dto = mapper.toVehicleDto(vehicle);
 
-        // Assert
         assertNotNull(dto);
         assertEquals(vehicle.getId(), dto.getId());
         assertEquals(vehicle.getBrand(), dto.getBrand());

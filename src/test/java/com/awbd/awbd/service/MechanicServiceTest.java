@@ -18,32 +18,34 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class MechanicServiceTest {
 
+    @InjectMocks
+    private MechanicService mechanicService;
+
     @Mock
     private MechanicRepository mechanicRepository;
 
     @Mock
     private MechanicMapper mechanicMapper;
 
-    @InjectMocks
-    private MechanicService mechanicService;
-
     @Test
     void findAll_ShouldReturnListOfMechanicDtos() {
-        // Arrange
         Mechanic mechanic1 = new Mechanic(); mechanic1.setId(1L);
         Mechanic mechanic2 = new Mechanic(); mechanic2.setId(2L);
 
-        MechanicDto dto1 = new MechanicDto(); dto1.setId(1L);
-        MechanicDto dto2 = new MechanicDto(); dto2.setId(2L);
+        MechanicDto dto1 = MechanicDto.builder()
+                .id(1L)
+                .build();
+
+        MechanicDto dto2 = MechanicDto.builder()
+                .id(2L)
+                .build();
 
         when(mechanicRepository.findAll()).thenReturn(List.of(mechanic1, mechanic2));
         when(mechanicMapper.toMechanicDto(mechanic1)).thenReturn(dto1);
         when(mechanicMapper.toMechanicDto(mechanic2)).thenReturn(dto2);
 
-        // Act
         List<MechanicDto> result = mechanicService.findAll();
 
-        // Assert
         assertEquals(2, result.size());
         assertEquals(dto1, result.get(0));
         assertEquals(dto2, result.get(1));

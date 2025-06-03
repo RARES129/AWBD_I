@@ -20,17 +20,14 @@ class MechanicMapperTest {
 
     @Test
     void testToMechanicDto_successfulMapping() {
-        // Arrange
         Mechanic mechanic = new Mechanic();
         mechanic.setId(1L);
         mechanic.setUsername("mechanic");
         mechanic.setPassword("secret");
         mechanic.setRole(Role.MECHANIC);
 
-        // Act
         MechanicDto dto = mechanicMapper.toMechanicDto(mechanic);
 
-        // Assert
         assertNotNull(dto);
         assertEquals(mechanic.getId(), dto.getId());
         assertEquals(mechanic.getUsername(), dto.getUsername());
@@ -40,10 +37,8 @@ class MechanicMapperTest {
 
     @Test
     void testToMechanicDto_nullMechanic_returnsNull() {
-        // Act
         MechanicDto dto = mechanicMapper.toMechanicDto(null);
 
-        // Assert
         assertNull(dto);
     }
 }

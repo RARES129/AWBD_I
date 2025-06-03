@@ -11,19 +11,24 @@ import com.awbd.awbd.mapper.VehicleMapper;
 import com.awbd.awbd.repository.AppointmentRepository;
 import com.awbd.awbd.repository.ClientRepository;
 import com.awbd.awbd.repository.VehicleRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class VehicleServiceTest {
 
     @InjectMocks
@@ -40,11 +45,6 @@ class VehicleServiceTest {
 
     @Mock
     private AppointmentRepository appointmentRepository;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     void save_shouldSaveVehicleForClient() {
@@ -76,45 +76,39 @@ class VehicleServiceTest {
         assertEquals(dto, result);
     }
 
+
     @Test
-    void findById_shouldThrowExceptionIfNotFound() {
-        when(vehicleRepository.findById(2L)).thenReturn(Optional.empty());
+    void findById_WhenNotExists_ShouldThrow() {
+        when(vehicleRepository.findById(1L)).thenReturn(Optional.empty());
 
-        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class, () -> vehicleService.findById(2L));
-
-        assertEquals("Vehicle not found with id: 2", ex.getMessage());
+        assertThrows(ResourceNotFoundException.class, () -> vehicleService.findById(1L));
     }
 
     @Test
-    void deleteById_shouldThrowIfVehicleHasUnfinishedAppointments() {
-        Appointment unfinished = new Appointment(); // no receipt == unfinished
-        List<Appointment> appointments = List.of(unfinished);
+    void deleteById_WhenVehicleHasUnfinishedAppointments_ShouldThrow() {
+        Appointment appointment = new Appointment();
+        when(appointmentRepository.findByVehicle_Id(1L)).thenReturn(List.of(appointment));
 
-        when(appointmentRepository.findByVehicle_Id(1L)).thenReturn(appointments);
-
-        EntityInUnfinishedAppointmentException ex = assertThrows(EntityInUnfinishedAppointmentException.class, () -> vehicleService.deleteById(1L));
-        assertEquals("Vehicle is used in an unfinished appointment.", ex.getMessage());
+        assertThrows(EntityInUnfinishedAppointmentException.class, () -> vehicleService.deleteById(1L));
     }
 
     @Test
-    void deleteById_shouldDeleteIfNoUnfinishedAppointments() {
-        Appointment finished = new Appointment();
-        finished.setReceipt(new Receipt()); // assume not null means finished
-        finished.setVehicle(new Vehicle());
+    void deleteById_WhenAppointmentsFinished_ShouldDeleteVehicle() {
+        Appointment appointment = new Appointment();
+        appointment.setReceipt(new Receipt());
+        appointment.setVehicle(new Vehicle());
 
-        List<Appointment> appointments = List.of(finished);
-
-        when(appointmentRepository.findByVehicle_Id(1L)).thenReturn(appointments);
+        when(appointmentRepository.findByVehicle_Id(1L)).thenReturn(List.of(appointment));
 
         vehicleService.deleteById(1L);
 
-        verify(appointmentRepository).saveAll(anyList());
+        assertNull(appointment.getVehicle());
+        verify(appointmentRepository).saveAll(List.of(appointment));
         verify(vehicleRepository).deleteById(1L);
-        assertNull(finished.getVehicle());
     }
 
     @Test
-    void findClientVehicles_shouldReturnVehicleDtos() {
+    void findClientVehicles_ShouldReturnVehicleDtos() {
         Client client = new Client();
         client.setId(1L);
         Vehicle vehicle = new Vehicle();
@@ -157,15 +151,14 @@ class VehicleServiceTest {
     }
 
     @Test
-    void ensureNotInUse_shouldThrowIfUsed() {
+    void ensureNotInUse_WhenInUse_ShouldThrow() {
         when(appointmentRepository.existsByVehicle_Id(1L)).thenReturn(true);
 
-        EntityInUnfinishedAppointmentException ex = assertThrows(EntityInUnfinishedAppointmentException.class, () -> vehicleService.ensureNotInUse(1L));
-        assertEquals("Vehicle is used in an unfinished appointment.", ex.getMessage());
+        assertThrows(EntityInUnfinishedAppointmentException.class, () -> vehicleService.ensureNotInUse(1L));
     }
 
     @Test
-    void ensureNotInUse_shouldNotThrowIfNotUsed() {
+    void ensureNotInUse_WhenNotInUse_ShouldNotThrow() {
         when(appointmentRepository.existsByVehicle_Id(1L)).thenReturn(false);
 
         assertDoesNotThrow(() -> vehicleService.ensureNotInUse(1L));

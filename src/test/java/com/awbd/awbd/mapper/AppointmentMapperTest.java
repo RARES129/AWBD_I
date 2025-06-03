@@ -33,7 +33,6 @@ class AppointmentMapperTest {
 
     @Test
     void testToAppointment_successfulMapping() {
-        // Arrange
         AppointmentDto dto = new AppointmentDto();
         dto.setId(1L);
         dto.setMechanicId(10L);
@@ -60,10 +59,8 @@ class AppointmentMapperTest {
         when(serviceTypeRepository.findById(30L)).thenReturn(Optional.of(st1));
         when(serviceTypeRepository.findById(31L)).thenReturn(Optional.of(st2));
 
-        // Act
         Appointment result = mapper.toAppointment(dto, client, mechanicRepository, vehicleRepository, serviceTypeRepository);
 
-        // Assert
         assertNotNull(result);
         assertEquals(dto.getId(), result.getId());
         assertEquals(client, result.getClient());
@@ -76,7 +73,6 @@ class AppointmentMapperTest {
 
     @Test
     void testToAppointment_missingVehicle_throwsException() {
-        // Arrange
         AppointmentDto dto = new AppointmentDto();
         dto.setId(1L);
         dto.setVehicleId(999L);
@@ -85,14 +81,12 @@ class AppointmentMapperTest {
 
         when(vehicleRepository.findById(999L)).thenReturn(Optional.empty());
 
-        // Act & Assert
         assertThrows(RuntimeException.class, () ->
                 mapper.toAppointment(dto, client, mechanicRepository, vehicleRepository, serviceTypeRepository));
     }
 
     @Test
     void testToAppointment_nullServiceTypeIdIsHandled() {
-        // Arrange
         AppointmentDto dto = new AppointmentDto();
         List<Long> serviceTypeIds = new java.util.ArrayList<>();
         serviceTypeIds.add(30L);
@@ -107,10 +101,8 @@ class AppointmentMapperTest {
         st1.setId(30L);
         when(serviceTypeRepository.findById(30L)).thenReturn(Optional.of(st1));
 
-        // Act
         Appointment result = mapper.toAppointment(dto, client, mechanicRepository, vehicleRepository, serviceTypeRepository);
 
-        // Assert
         assertNotNull(result.getServiceTypes());
         assertEquals(2, result.getServiceTypes().size());
         assertTrue(result.getServiceTypes().contains(null));
@@ -118,12 +110,11 @@ class AppointmentMapperTest {
 
     @Test
     void testToAppointment_nullServiceTypeIds_returnsNull() {
-        // Arrange
         AppointmentDto dto = new AppointmentDto();
         dto.setId(1L);
         dto.setVehicleId(20L);
         dto.setMechanicId(10L);
-        dto.setServiceTypeIds(null); // explicitly null
+        dto.setServiceTypeIds(null);
 
         Client client = new Client();
         Mechanic mechanic = new Mechanic();
@@ -134,10 +125,8 @@ class AppointmentMapperTest {
         when(mechanicRepository.findById(10L)).thenReturn(Optional.of(mechanic));
         when(vehicleRepository.findById(20L)).thenReturn(Optional.of(vehicle));
 
-        // Act
         Appointment result = mapper.toAppointment(dto, client, mechanicRepository, vehicleRepository, serviceTypeRepository);
 
-        // Assert
         assertNotNull(result);
         assertEquals(dto.getId(), result.getId());
         assertEquals(client, result.getClient());
@@ -148,23 +137,18 @@ class AppointmentMapperTest {
 
     @Test
     void testToAppointment_bothDtoAndClientNull_returnsNull() {
-        // Act
         Appointment result = mapper.toAppointment(null, null, mechanicRepository, vehicleRepository, serviceTypeRepository);
 
-        // Assert
         assertNull(result, "Expected null when both appointmentDto and client are null");
     }
 
     @Test
     void testToAppointment_nullDtoButNonNullClient_returnsAppointmentWithOnlyClientSet() {
-        // Arrange
         Client client = new Client();
         client.setId(123L);
 
-        // Act
         Appointment result = mapper.toAppointment(null, client, mechanicRepository, vehicleRepository, serviceTypeRepository);
 
-        // Assert
         assertNotNull(result);
         assertNull(result.getId());
         assertEquals(client, result.getClient());
@@ -173,4 +157,41 @@ class AppointmentMapperTest {
         assertTrue(result.getServiceTypes() == null || result.getServiceTypes().isEmpty(), "Service types should be null or empty");
         assertNull(result.getDateTime());
     }
+
+    @Test
+    void testMapServiceTypeIds_nullInput_returnsNull() {
+        List<Long> result = mapper.mapServiceTypeIds(null);
+
+        assertNull(result);
+    }
+
+    @Test
+    void testToAppointmentDto_nullMechanicAndVehicle_fieldsAreNull() {
+        Appointment appointment = Appointment.builder()
+                .id(1L)
+                .client(new Client())
+                .mechanic(null)
+                .vehicle(null)
+                .serviceTypes(null)
+                .dateTime(null)
+                .build();
+
+        AppointmentDto result = mapper.toAppointmentDto(appointment);
+
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        assertNull(result.getMechanicId(), "Expected null mechanicId when mechanic is null");
+        assertNull(result.getVehicleId(), "Expected null vehicleId when vehicle is null");
+        assertNull(result.getServiceTypeIds(), "Expected null serviceTypeIds when serviceTypes are null");
+        assertNull(result.getDateTime(), "Expected null dateTime when dateTime is null");
+    }
+
+    @Test
+    void testToAppointmentDto_nullAppointment_returnsNull() {
+        AppointmentDto result = mapper.toAppointmentDto(null);
+
+        assertNull(result, "Expected null when input Appointment is null");
+    }
+
+
 }

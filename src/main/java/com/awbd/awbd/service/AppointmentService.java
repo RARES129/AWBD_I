@@ -27,12 +27,12 @@ public class AppointmentService {
     private final ServiceTypeRepository serviceTypeRepository;
 
     @Transactional
-    public void save(AppointmentDto appointmentDto) {
+    public AppointmentDto save(AppointmentDto appointmentDto) {
         String username = SecurityUtil.getSessionUsername();
         Client client = clientRepository.findByUsername(username);
 
         Appointment appointment = appointmentMapper.toAppointment(appointmentDto, client, mechanicRepository, vehicleRepository, serviceTypeRepository);
-        appointmentRepository.save(appointment);
+        return appointmentMapper.toAppointmentDto(appointmentRepository.save(appointment));
     }
 
     public List<Appointment> findAppointments() {

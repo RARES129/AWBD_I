@@ -28,12 +28,12 @@ public class ServiceTypeService {
     private final AppointmentRepository appointmentRepository;
 
     @Transactional
-    public void save(ServiceTypeDto serviceTypeDto) {
+    public ServiceTypeDto save(ServiceTypeDto serviceTypeDto) {
         String username = SecurityUtil.getSessionUsername();
         Mechanic mechanic = mechanicRepository.findByUsername(username);
 
         ServiceType serviceType = serviceTypeMapper.toServiceType(serviceTypeDto, mechanic);
-        serviceTypeRepository.save(serviceType);
+        return serviceTypeMapper.toServiceTypeDto(serviceTypeRepository.save(serviceType));
     }
 
     public List<ServiceTypeDto> findMechanicServiceTypes() {

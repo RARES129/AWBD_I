@@ -1,40 +1,65 @@
 package com.awbd.awbd.controller;
 
-import com.awbd.awbd.dto.VehicleDto;
-import com.awbd.awbd.service.VehicleService;
+import com.awbd.awbd.entity.Client;
+import com.awbd.awbd.entity.Role;
+import com.awbd.awbd.entity.Vehicle;
+import com.awbd.awbd.repository.UserRepository;
+import com.awbd.awbd.repository.VehicleRepository;
+import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.security.test.context.support.TestExecutionEvent;
+import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Collections;
-
-import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
+@ActiveProfiles("test")
 class VehicleControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @MockitoBean
-    private VehicleService vehicleService;
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private VehicleRepository vehicleRepository;
+
+    private Long vehicleId;
+
+    @BeforeEach
+    void setUp() {
+        Client client = Client.builder()
+                .username("client")
+                .password("12345")
+                .role(Role.CLIENT)
+                .build();
+        client = userRepository.save(client);
+
+        Vehicle vehicle = Vehicle.builder()
+                .brand("Toyota")
+                .model("Corolla")
+                .plateNumber("AB123CD")
+                .owner(client)
+                .build();
+        vehicle = vehicleRepository.save(vehicle);
+        vehicleId = vehicle.getId();
+    }
 
     @Test
-    @WithMockUser(username = "testUser", password = "12345", roles = "CLIENT")
+    @WithUserDetails(value = "client", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void testVehicleForm() throws Exception {
         mockMvc.perform(get("/vehicle/form"))
                 .andExpect(status().isOk())
@@ -43,14 +68,12 @@ class VehicleControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "testUser", password = "12345", roles = "CLIENT")
+    @WithUserDetails(value = "client", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void testSaveOrUpdate_Valid() throws Exception {
-        doNothing().when(vehicleService).save(ArgumentMatchers.any(VehicleDto.class));
-
         mockMvc.perform(post("/vehicle")
                         .param("brand", "Toyota")
                         .param("model", "Corolla")
-                        .param("plateNumber", "AB123CD")
+                        .param("plateNumber", "AB123DE")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
@@ -58,7 +81,7 @@ class VehicleControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "testUser", password = "12345", roles = "CLIENT")
+    @WithUserDetails(value = "client", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void testSaveOrUpdate_Invalid() throws Exception {
         mockMvc.perform(post("/vehicle")
                         .param("brand", "")
@@ -72,12 +95,8 @@ class VehicleControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "testUser", password = "12345", roles = "CLIENT")
+    @WithUserDetails(value = "client", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void testVehicleList() throws Exception {
-        Page<VehicleDto> vehiclePage = new PageImpl<>(Collections.emptyList(), PageRequest.of(0, 5), 0);
-        when(vehicleService.findClientVehiclesPaginated(PageRequest.of(0, 5, Sort.by("id"))))
-                .thenReturn(vehiclePage);
-
         mockMvc.perform(get("/vehicle"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("vehicleList"))
@@ -87,13 +106,8 @@ class VehicleControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "testUser", password = "12345", roles = "CLIENT")
+    @WithUserDetails(value = "client", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void testEdit() throws Exception {
-        Long vehicleId = 1L;
-        VehicleDto vehicle = new VehicleDto();
-        when(vehicleService.findById(vehicleId)).thenReturn(vehicle);
-        doNothing().when(vehicleService).ensureNotInUse(vehicleId);
-
         mockMvc.perform(get("/vehicle/edit/{id}", vehicleId))
                 .andExpect(status().isOk())
                 .andExpect(view().name("vehicleForm"))
@@ -101,11 +115,8 @@ class VehicleControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "testUser", password = "12345", roles = "CLIENT")
+    @WithUserDetails(value = "client", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void testDeleteById() throws Exception {
-        Long vehicleId = 1L;
-        doNothing().when(vehicleService).deleteById(vehicleId);
-
         mockMvc.perform(get("/vehicle/delete/{id}", vehicleId))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/vehicle"));

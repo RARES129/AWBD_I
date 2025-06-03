@@ -19,7 +19,6 @@ class ServiceTypeMapperTest {
 
     @Test
     void toServiceType_withValidDtoAndMechanic_mapsAllFields() {
-        // Arrange
         ServiceTypeDto dto = new ServiceTypeDto();
         dto.setId(1L);
         dto.setName("Oil Change");
@@ -29,10 +28,8 @@ class ServiceTypeMapperTest {
         mechanic.setId(10L);
         mechanic.setUsername("john");
 
-        // Act
         ServiceType serviceType = mapper.toServiceType(dto, mechanic);
 
-        // Assert
         assertNotNull(serviceType);
         assertEquals(dto.getId(), serviceType.getId());
         assertEquals(dto.getName(), serviceType.getName());
@@ -42,25 +39,20 @@ class ServiceTypeMapperTest {
 
     @Test
     void toServiceType_withNullDto_returnsNull() {
-        // Act
         ServiceType serviceType = mapper.toServiceType(null, new Mechanic());
 
-        // Assert
         assertNull(serviceType);
     }
 
     @Test
     void toServiceTypeDto_withValidServiceType_mapsAllFields() {
-        // Arrange
         ServiceType serviceType = new ServiceType();
         serviceType.setId(2L);
         serviceType.setName("Tire Replacement");
         serviceType.setPrice(250.0);
 
-        // Act
         ServiceTypeDto dto = mapper.toServiceTypeDto(serviceType);
 
-        // Assert
         assertNotNull(dto);
         assertEquals(serviceType.getId(), dto.getId());
         assertEquals(serviceType.getName(), dto.getName());
@@ -69,10 +61,8 @@ class ServiceTypeMapperTest {
 
     @Test
     void toServiceTypeDto_withNullServiceType_returnsNull() {
-        // Act
         ServiceTypeDto dto = mapper.toServiceTypeDto(null);
 
-        // Assert
         assertNull(dto);
     }
 }
