@@ -82,31 +82,27 @@
 
             <div class="panel-body">
                 <div class="form-group row">
-                    <div class="col-md-5 ">
-                        <div class="form-row">
-                            <label>Brand</label>
-                            <label th:if="${#fields.hasErrors('brand')}" th:errors="*{brand}">Error</label>
-                            <input class="form-control" th:field="*{brand}" type="text"/>
-                        </div>
-                        <br>
-                        <div class="form-row">
-                            <label>Model</label>
-                            <label th:if="${#fields.hasErrors('model')}" th:errors="*{model}">Error</label>
-                            <input class="form-control" th:field="*{model}" type="text"/>
-                        </div>
-                        <br>
-                        <div class="form-row">
-                            <label>Plate Number</label>
-                            <label th:if="${#fields.hasErrors('plateNumber')}" th:errors="*{plateNumber}">Error</label>
-                            <input class="form-control" th:field="*{plateNumber}" type="text"/>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="brand">Brand</label>
+                            <input id="brand" class="form-control" th:field="*{brand}" type="text"/>
+                            <div th:if="${#fields.hasErrors('brand')}" th:errors="*{brand}" class="text-danger small"></div>
                         </div>
 
+                        <div class="form-group mt-3">
+                            <label for="model">Model</label>
+                            <input id="model" class="form-control" th:field="*{model}" type="text"/>
+                            <div th:if="${#fields.hasErrors('model')}" th:errors="*{model}" class="text-danger small"></div>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="plateNumber">Plate Number</label>
+                            <input id="plateNumber" class="form-control" th:field="*{plateNumber}" type="text"/>
+                            <div th:if="${#fields.hasErrors('plateNumber')}" th:errors="*{plateNumber}" class="text-danger small"></div>
+                        </div>
                     </div>
-
                 </div>
-                <p>
-
-                </p>
+                <p></p>
                 <div class="row-md-5">
                     <div class="col-md-1 ml-md-auto">
                         <button class="btn btn-primary" type="submit">Submit</button>
@@ -116,7 +112,6 @@
         </div>
     </div>
 </form>
-
 
 </body>
 </html>

@@ -84,29 +84,33 @@
             <div class="panel-body">
                 <div class="form-group row">
                     <div class="col-md-5">
-                        <label>Date & Time</label>
-                        <label th:if="${#fields.hasErrors('dateTime')}" th:errors="*{dateTime}">Error</label>
-                            <input class="form-control" th:field="*{dateTime}" type="datetime-local"/>
-                        <br>
+                        <div class="form-group">
+                            <label for="dateTime">Date & Time</label>
+                            <input id="dateTime" class="form-control" th:field="*{dateTime}" type="datetime-local"/>
+                            <div th:if="${#fields.hasErrors('dateTime')}" th:errors="*{dateTime}" class="text-danger small"></div>
+                        </div>
 
-                        <label>Vehicle</label>
-                        <label th:if="${#fields.hasErrors('vehicleId')}" th:errors="*{vehicleId}">Error</label>
-                            <select class="form-control" th:field="*{vehicleId}" required>
-                                <option th:each="vehicle : ${vehicles}" th:value="${vehicle.getId()}"
+                        <div class="form-group mt-3">
+                            <label for="vehicle">Vehicle</label>
+                            <select id="vehicle" class="form-control" th:field="*{vehicleId}" required>
+                                <option th:each="vehicle : ${vehicles}" th:value="${vehicle.id}"
                                         th:text="${vehicle.brand + ' ' + vehicle.model + ' (' + vehicle.plateNumber + ')'}">
                                 </option>
                             </select>
-                        <br>
+                            <div th:if="${#fields.hasErrors('vehicleId')}" th:errors="*{vehicleId}" class="text-danger small"></div>
+                        </div>
 
-                        <label>Service Type</label>
-                        <label th:if="${#fields.hasErrors('serviceTypeIds')}" th:errors="*{serviceTypeIds}">Error</label>
-                        <select class="selectpicker form-control" th:field="*{serviceTypeIds}" multiple required>
-                            <option th:each="serviceType : ${serviceTypes}" th:value="${serviceType.id}"
-                                    th:text="${serviceType.name}">
-                            </option>
-                        </select>
-                        <br>
+                        <div class="form-group mt-3">
+                            <label for="serviceTypes">Service Type</label>
+                            <select id="serviceTypes" class="selectpicker form-control" th:field="*{serviceTypeIds}" multiple required>
+                                <option th:each="serviceType : ${serviceTypes}" th:value="${serviceType.id}"
+                                        th:text="${serviceType.name}">
+                                </option>
+                            </select>
+                            <div th:if="${#fields.hasErrors('serviceTypeIds')}" th:errors="*{serviceTypeIds}" class="text-danger small"></div>
+                        </div>
                     </div>
+
                 </div>
                 <div class="row-md-5">
                     <div class="col-md-1 ml-md-auto">

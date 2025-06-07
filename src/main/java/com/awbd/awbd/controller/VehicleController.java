@@ -4,12 +4,14 @@ import com.awbd.awbd.dto.VehicleDto;
 import com.awbd.awbd.service.VehicleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,7 +37,13 @@ public class VehicleController {
             return "vehicleForm";
         }
 
-        vehicleService.save(vehicle);
+        try {
+            vehicleService.save(vehicle);
+        } catch (DataIntegrityViolationException e) {
+            bindingResult.addError(new FieldError("vehicle", "plateNumber", "Plate number must be unique"));
+            return "vehicleForm";
+        }
+
         return "redirect:/vehicle" ;
     }
 

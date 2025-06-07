@@ -96,6 +96,20 @@ class VehicleControllerTest {
 
     @Test
     @WithUserDetails(value = "client", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    void testSaveOrUpdate_DuplicatePlateNumber() throws Exception {
+        mockMvc.perform(post("/vehicle")
+                        .param("brand", "Toyota")
+                        .param("model", "Corolla")
+                        .param("plateNumber", "AB123CD")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("vehicleForm"))
+                .andExpect(model().attributeHasFieldErrors("vehicle", "plateNumber"));
+    }
+
+    @Test
+    @WithUserDetails(value = "client", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void testVehicleList() throws Exception {
         mockMvc.perform(get("/vehicle"))
                 .andExpect(status().isOk())
